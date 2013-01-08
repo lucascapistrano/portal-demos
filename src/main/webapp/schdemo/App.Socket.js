@@ -166,7 +166,7 @@ Ext.define('App.Socket', {
 	onRemove: function(data) {
 		var storeType = data.storeType, ids = data.ids, store = this.getStoreByType(storeType), record, current;
 
-		store.suspendEvents();
+		store.suspendEvents(true);
 
 		for ( var i = 0; i < ids.length; i += 1) {
 			current = ids[i];

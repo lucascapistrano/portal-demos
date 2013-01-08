@@ -12,10 +12,10 @@ Online
 Websocket only works with the two HAProxy links. 
 
 
-Chat
-  This is the sample application from [portal-java](https://github.com/flowersinthesand/portal-java)
+Chat    
+This is the sample application from [portal-java](https://github.com/flowersinthesand/portal-java)
   
-Scheduler
-  This is a port from a Node.js application described in this blog post: 
-  http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/
+Scheduler    
+This is a port from a Node.js application described in this blog post: 
+http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/
   
