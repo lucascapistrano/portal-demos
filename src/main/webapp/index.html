@@ -1,29 +1,73 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
+<meta charset="utf-8">
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap.no-icons.min.css" rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css" rel="stylesheet">
+<style>
+.highlight {
+	font-weight: bold;
+	background-color: #66FFFF;
+}
+</style>
 </head>
 <body>
-  <h3>Demos</h3>
-  <ul>
-    <li><a href="chatdemo/index.html">Chat Demo (with ws)</a></li>
-    <li><a href="chatdemo/index.html?nows">Chat Demo (without ws)</a></li>
-    <li><a href="schdemo/index.html">Scheduler Demo (with ws)</a></li>
-    <li><a href="schdemo/index.html?nows">Scheduler Demo (without ws)</a></li>
-  </ul>
-  <p>
-  <h3>Environments</h3>
-  <ul>
-    <li><a href="http://portal-demos.rasc.ch/ajp/">Apache &lt;-- AJP --&gt; Tomcat</a></li>
-    <li><a href="http://portal-demos.rasc.ch/bio/">Apache &lt;-- HTTP BIO --&gt; Tomcat</a></li>
-    <li><a href="http://portal-demos.rasc.ch/nio/">Apache &lt;-- HTTP NIO --&gt; Tomcat</a></li>
-    <li><a href="http://ha-bio.rasc.ch/portal-demos/">HAProxy &lt;-- HTTP BIO --&gt; Tomcat</a></li>
-    <li><a href="http://ha-nio.rasc.ch/portal-demos/">HAProxy &lt;-- HTTP NIO --&gt; Tomcat</a></li>
-  </ul>  
-  The websocket enabled demos only work with HAProxy. 
-  
-  <p>
-  Source Code: <a href="https://github.com/ralscha/portal-demos">https://github.com/ralscha/portal-demos</a>
-  
+
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="./index.html">portal-java demos</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="span12">
+
+			<section id="demo-links">
+				<h3>Demos</h3>
+				<ul>
+					<li>
+					  Chat: Websocket <a href="chatdemo/index.html?nows">disabled</a>, <a href="chatdemo/index.html">enabled</a>
+					  <p>This is the sample application from <a href="https://github.com/flowersinthesand/portal-java">portal-java</a></p>
+					</li>
+					<li>
+					  Scheduler: Websocket <a href="schdemo/index.html?nows">disabled</a>, <a href="schdemo/index.html">enabled</a>
+					  <p>This is a port from a Ext JS/Node.js sample application published in this blog post: <a href="http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/">http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/</a></p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="environments">
+				<h3>Environments</h3>
+				<ul> 
+					<li><a href="http://portal-demos.rasc.ch/ajp/index.html">Apache <i class="icon-exchange"></i> AJP Tomcat</a></li>
+					<li><a href="http://portal-demos.rasc.ch/bio/index.html">Apache <i class="icon-exchange"></i> HTTP BIO Tomcat</a></li>
+					<li><a href="http://portal-demos.rasc.ch/nio/index.html">Apache <i class="icon-exchange"></i> HTTP NIO Tomcat</a></li>
+					<li><a href="http://ha-bio.rasc.ch/portal-demos/index.html">HAProxy <i class="icon-exchange"></i> HTTP BIO Tomcat</a></li>
+					<li><a href="http://ha-nio.rasc.ch/portal-demos/index.html">HAProxy <i class="icon-exchange"></i> HTTP NIO Tomcat</a></li>
+				</ul>
+				<p>Websocket currently only works with HAProxy and BIO Connector</p>
+			</section>
+			
+			<section id="links">
+			  <h3>Links</h3>
+			  <ul>
+			    <li><a href="https://github.com/ralscha/portal-demos">GitHub repository</a> for this project</li>
+			    <li><a href="https://github.com/flowersinthesand/portal-java">portal-java</a></li>
+			    <li><a href="https://github.com/flowersinthesand/portal">portal js</a></li>
+			    <li><a href="https://github.com/Atmosphere/atmosphere">atmosphere</a></li>
+			  </ul>
+			</section>
+		</div>
+	</div>
+
+  <script>
+    var activeLink = document.querySelector('a[href="'+window.location.href+'"]');
+    if (activeLink) {
+    	activeLink.className = 'highlight';
+    }
+  </script>
+
 </body>
-</html>  
+</html>
