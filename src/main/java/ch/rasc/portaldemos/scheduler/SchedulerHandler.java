@@ -28,11 +28,6 @@ public class SchedulerHandler {
 		room.add(socket);
 	}
 
-	@On.close
-	public void close(Socket socket) {
-		System.out.println("CLOSE: " + socket);
-	}
-
 	@On("client_doInitialLoad")
 	public void doInitialLoad(Socket socket, @Data Map<String, Object> data) {
 		String storeType = (String) data.get("storeType");
