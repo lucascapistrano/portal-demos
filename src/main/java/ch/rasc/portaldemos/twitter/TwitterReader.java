@@ -24,7 +24,12 @@ public class TwitterReader {
 
 	@Scheduled(initialDelay = 5000, fixedDelay = 20000)
 	public void readTwitterFeed() throws TwitterException {
-		Room myRoom = App.find("/twitter").room("twitter");
+		App myApp = App.find("/twitter");
+		if (myApp == null) {
+			return;
+		}
+
+		Room myRoom = myApp.room("twitter");
 
 		if (myRoom.size() > 0) {
 			Twitter twitter = TwitterFactory.getSingleton();
