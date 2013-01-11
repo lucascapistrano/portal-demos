@@ -1,7 +1,5 @@
 package ch.rasc.portaldemos.chat;
 
-import java.util.Map;
-
 import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.Handler;
 import com.github.flowersinthesand.portal.Name;
@@ -21,7 +19,7 @@ public class ChatHandler {
 	}
 
 	@On.message
-	public void message(@Data Map<String, Object> message) {
+	public void message(@Data ChatMessage message) {
 		room.send("message", message);
 	}
 
