@@ -4,15 +4,17 @@ import java.io.IOException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
+import org.atmosphere.cpr.ApplicationConfig;
 import org.atmosphere.cpr.AtmosphereHandler;
 import org.atmosphere.cpr.AtmosphereServlet;
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Initializer;
 
-@WebServlet(urlPatterns = { "/sch", "/chat", "/twitter", "/snake" }, loadOnStartup = 0, asyncSupported = true)
+@WebServlet(urlPatterns = { "/sch", "/chat", "/twitter", "/snake" }, loadOnStartup = 0, asyncSupported = true, initParams = @WebInitParam(name = ApplicationConfig.MAX_INACTIVE, value = "30000"))
 public class PortalServlet extends AtmosphereServlet {
 
 	private static final long serialVersionUID = 1L;

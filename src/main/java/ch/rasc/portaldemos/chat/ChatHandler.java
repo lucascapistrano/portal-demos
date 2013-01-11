@@ -13,6 +13,11 @@ public class ChatHandler {
 	@Name("chat")
 	Room room;
 
+	@On.close
+	public void close(Socket socket) {
+		System.out.println("closing: " + socket);
+	}
+
 	@On.open
 	public void open(Socket socket) {
 		room.add(socket);
