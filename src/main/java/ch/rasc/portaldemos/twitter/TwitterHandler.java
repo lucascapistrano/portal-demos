@@ -1,5 +1,7 @@
 package ch.rasc.portaldemos.twitter;
 
+import java.util.List;
+
 import com.github.flowersinthesand.portal.Handler;
 import com.github.flowersinthesand.portal.Name;
 import com.github.flowersinthesand.portal.On;
@@ -15,6 +17,11 @@ public class TwitterHandler {
 	@On.open
 	public void open(Socket socket) {
 		room.add(socket);
+		
+		List<Tweet> lastTweets = (List<Tweet>)room.get(TwitterReader.LAST_RECEIVED_TWEETS_KEY);
+		if (lastTweets != null) {
+			socket.send("newTweets", lastTweets);
+		}
 	}
 
 }
