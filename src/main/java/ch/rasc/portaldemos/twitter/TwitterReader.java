@@ -19,7 +19,7 @@ import com.google.common.collect.Lists;
 @Service
 public class TwitterReader {
 	public final static String LAST_RECEIVED_TWEETS_KEY = "LAST_RECEIVED_TWEETS";
-	
+
 	private long sinceId = 0;
 
 	@Scheduled(initialDelay = 5000, fixedDelay = 20000)

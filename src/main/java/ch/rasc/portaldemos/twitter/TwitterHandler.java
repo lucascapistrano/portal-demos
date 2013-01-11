@@ -17,8 +17,8 @@ public class TwitterHandler {
 	@On.open
 	public void open(Socket socket) {
 		room.add(socket);
-		
-		List<Tweet> lastTweets = (List<Tweet>)room.get(TwitterReader.LAST_RECEIVED_TWEETS_KEY);
+
+		List<Tweet> lastTweets = (List<Tweet>) room.get(TwitterReader.LAST_RECEIVED_TWEETS_KEY);
 		if (lastTweets != null) {
 			socket.send("newTweets", lastTweets);
 		}
