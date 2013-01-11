@@ -10,6 +10,7 @@
 	background-color: #66FFFF;
 }
 </style>
+<title>portal-java demos</title>
 </head>
 <body>
 
@@ -28,17 +29,21 @@
 				<h3>Demos</h3>
 				<ul>
 					<li>
-					  Chat: Websocket <a href="chatdemo/index.html?nows">disabled</a>, <a href="chatdemo/index.html">enabled</a>
-					  <p>This is the sample application from <a href="https://github.com/flowersinthesand/portal-java">portal-java</a></p>
+					  <strong><a class="demolink" href="chatdemo/index.html">Chat</a></strong>
+					  <p>This is the sample application from <a href="https://github.com/flowersinthesand/portal-java">portal-java</a>.</p>
 					</li>
 					<li>
-					  Scheduler: Websocket <a href="schdemo/index.html?nows">disabled</a>, <a href="schdemo/index.html">enabled</a>
-					  <p>This is a port from a Ext JS/Node.js sample application published in this blog post: <a href="http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/">http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/</a></p>
+					  <strong><a class="demolink" href="schdemo/index.html">Scheduler</a></strong>
+					  <p>This is a port from a Ext JS/Node.js sample application published in this blog post: <a href="http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/">http://www.bryntum.com/blog/nodejs-ext-scheduler-realtime-updates/</a>.</p>
 					</li>
 					<li>
-					  Twitter: Websocket <a href="twitterdemo/index.html?nows">disabled</a>, <a href="twitterdemo/index.html">enabled</a>
-					  <p>Twitter 'Java' Tweets. The server side polls Twitter every 20 seconds with the search query 'java'</p>
-					</li>					
+					  <strong><a class="demolink" href="twitterdemo/index.html">Twitter</a></strong>
+					  <p>'Java' Tweets. The server side polls Twitter every 20 seconds with the search query 'java'.</p>
+					</li>	
+					<li>
+					  <strong><a class="demolink" href="snakedemo/index.html">Snake</a></strong>
+					  <p>Translation of the Websocket snake demo included in the Tomcat 7 distribution (webapps/examples folder).</p>
+					</li>	
 				</ul>
 			</section>
 
@@ -51,7 +56,7 @@
 					<li><a href="http://ha-bio.rasc.ch/portal-demos/index.html">HAProxy <i class="icon-exchange"></i> HTTP BIO Tomcat</a></li>
 					<li><a href="http://ha-nio.rasc.ch/portal-demos/index.html">HAProxy <i class="icon-exchange"></i> HTTP NIO Tomcat</a></li>
 				</ul>
-				<p>Websocket currently only works with HAProxy and BIO Connector</p>
+				<p>Websocket currently only works with HAProxy and the BIO Connector. This web application is deployed on a Tomcat that restarts every hour (xx:42)</p>
 			</section>
 			
 			<section id="links">
@@ -67,9 +72,25 @@
 	</div>
 
   <script>
-    var activeLink = document.querySelector('a[href="'+window.location.href+'"]');
+    var activeLink = document.querySelector('a[href^="'+window.location.href+'"]');
     if (activeLink) {
     	activeLink.className = 'highlight';
+    }
+    
+    var wsEnabledUrl = ['http://ha-bio.rasc.ch/portal-demos/', 'http://localhost:8080/'];
+    var wsEnabled = false;
+    for (var j = 0; j < wsEnabledUrl.length; j++) {
+    	if (window.location.href.indexOf(wsEnabledUrl[j]) >= 0) {
+    		wsEnabled = true;
+    		break;
+    	}
+    }
+    if (!wsEnabled) {
+	    var demoLinks = document.querySelectorAll('.demolink');
+	    for (var i = 0; i < demoLinks.length; i++) {
+	    	demoLinks[i].href = demoLinks[i].href + '?nows';
+	    	console.log(demoLinks[i].href);
+	    }
     }
   </script>
 

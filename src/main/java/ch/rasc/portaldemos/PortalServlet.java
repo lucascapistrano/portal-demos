@@ -12,7 +12,7 @@ import org.atmosphere.cpr.AtmosphereServlet;
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Initializer;
 
-@WebServlet(urlPatterns = { "/sch", "/chat", "/twitter" }, loadOnStartup = 0)
+@WebServlet(urlPatterns = { "/sch", "/chat", "/twitter", "/snake" }, loadOnStartup = 0, asyncSupported = true)
 public class PortalServlet extends AtmosphereServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public class PortalServlet extends AtmosphereServlet {
 
 		try {
 			Initializer i = new Initializer().init("ch.rasc.portaldemos.chat", "ch.rasc.portaldemos.scheduler",
-					"ch.rasc.portaldemos.twitter");
+					"ch.rasc.portaldemos.twitter", "ch.rasc.portaldemos.snake");
 			for (App app : i.apps().values()) {
 				getServletContext().setAttribute("com.github.flowersinthesand.portal.App#" + app.name(), app);
 				framework.addAtmosphereHandler(app.name(), (AtmosphereHandler) app.socketManager());
