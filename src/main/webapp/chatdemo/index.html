@@ -24,8 +24,11 @@
 					if (!username) {
 						username = input.value;
 						$("#editor p").addClass("user").removeClass("guide").text(username);
-						
-						portal.open("../chat", {sharing: false}).on({
+						var transports = ["sse", "stream", "longpoll"];
+						if (!window.location.search || window.location.search.indexOf('nows') === -1) {
+							transports.unshift("ws");
+						}
+						portal.open("../chat", {sharing: false, transports: transports}).on({
 							connecting: function() {
 								notify("The connection has been tried by '" + this.data("transport") + "'");
 							},
