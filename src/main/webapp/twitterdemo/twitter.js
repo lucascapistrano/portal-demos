@@ -44,7 +44,7 @@ Ext.onReady(function(){
 		transports.unshift("ws");
 	}
 	
-	portal.open("../twitter", {transports: transports}).on({
+	portal.open("../twitter", {transports: transports, sharing: false}).on({
 		open: function() {
 			panel.setTitle('Twitter Example TRANSPORT: ' + this.data("transport"));
 		},

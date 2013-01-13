@@ -1,8 +1,6 @@
 Ext.ns('App');
 
-Ext.onReady(function() {
-	portal.defaults.heartbeat = 20000;
-	
+Ext.onReady(function() {	
 	Ext.QuickTips.init();
 	App.SchedulerDemo.init();
 });
