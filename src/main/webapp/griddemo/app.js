@@ -22,12 +22,18 @@ Ext.onReady(function() {
 		}, {
 			name: 'publisher',
 			type: 'string'
+		}, {
+			name: 'isbn',
+			type: 'string'
+		}, {
+			name: 'link',
+			type: 'string'
 		} ],
 		proxy: {
 			type: 'portal',
 			api: {
 				create: 'bookCreate',
-				update: 'bookUpdate', 
+				update: 'bookUpdate',
 				destroy: 'bookDestroy',
 				read: 'bookRead',
 				created: 'bookCreated',
@@ -43,7 +49,6 @@ Ext.onReady(function() {
 		remoteSort: true
 	});
 
-	
 	var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
 		clicksToMoveEditor: 1,
 		autoCancel: false
@@ -54,7 +59,11 @@ Ext.onReady(function() {
 		columns: [ {
 			header: 'ID',
 			dataIndex: 'id',
-			width: 100			
+			width: 50
+		}, {
+			header: 'ISBN',
+			dataIndex: 'isbn',
+			width: 100
 		}, {
 			header: 'Title',
 			dataIndex: 'title',
@@ -65,13 +74,19 @@ Ext.onReady(function() {
 		}, {
 			header: 'Publisher',
 			dataIndex: 'publisher',
-			flex: 1,
+			width: 100,
 			editor: {
 				allowBlank: true
 			}
+		}, {
+			header: 'Link',
+			dataIndex: 'link',
+			xtype: 'templatecolumn', 
+			tpl: '<a href="{link}" target="_blank">{link}</a>',
+			flex: 1
 		}],
 		renderTo: Ext.getBody(),
-		width: 700,
+		width: 900,
 		height: 400,
 		title: 'Books',
 		frame: true,
@@ -104,7 +119,7 @@ Ext.onReady(function() {
 			text: 'Rollback',
 			handler: function() {
 				store.rejectChanges();
-			}			
+			}
 		}, '-', {
 			text: 'Sync',
 			handler: function() {
@@ -117,7 +132,6 @@ Ext.onReady(function() {
 				grid.down('#removeBook').setDisabled(!records.length);
 			}
 		}
-	});	
-		
+	});
 
 });
