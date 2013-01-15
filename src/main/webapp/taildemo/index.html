@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Apache Access Log Heatmap</title>
+
+<script src="http://openlayers.org/api/OpenLayers.js"></script>
+<script src="heatmap.js"></script>
+<script src="heatmap-openlayers.js"></script>
+<script src="../portal-1.0rc2.js"></script>
+<script src="../portal-extension.js"></script>
+
+<style>
+.smallmap {
+	width: 700px;
+	height: 400px;
+}
+.olControlAttribution {
+    bottom: 0.5em !important;
+}
+</style>
+
+<script type="text/javascript">
+	function init() {
+
+		var map = new OpenLayers.Map('map');
+		var layer = new OpenLayers.Layer.OSM();
+		
+		var heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", map, layer, 
+				{visible: true, radius:10}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
+		map.addLayers([layer, heatmap]);
+		
+		//map.zoomToMaxExtent();
+		map.zoomIn();		
+		
+		var transports = ["sse", "stream", "longpoll"];
+		if (!window.location.search || window.location.search.indexOf('nows') === -1) {
+			transports.unshift("ws");
+		}
+		
+		portal.open("../tail", {sharing: false, transports: transports}).on({
+			latlng: function(data) {
+				if (data instanceof Array) {
+					var transformedData = [];
+					for (var i = 0; i < data.length; i++) {
+						transformedData.push({lonlat: new OpenLayers.LonLat(data[i].lng, data[i].lat)});
+					}
+					heatmap.setDataSet({data: transformedData});
+				} else {
+					heatmap.addDataPoint(new OpenLayers.LonLat(data.lng, data.lat));
+				}
+			}
+		});
+		
+	}
+</script>
+</head>
+<body onload="init()">
+	<h1 id="title">Basic OSM Example</h1>
+
+	<div id="map" class="smallmap"></div>
+
+
+</body>
+</html>
