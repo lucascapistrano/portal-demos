@@ -82,6 +82,7 @@ public class TailInitializer implements ServletContextListener {
 					access.setDate(DateTime.now().getMillis());
 					access.setCity(l.city);
 					access.setCountry(l.countryName);
+					access.setMessage(line);
 					access.setLl(new float[] { l.latitude, l.longitude });
 
 					myRoom.send("geoip", access);

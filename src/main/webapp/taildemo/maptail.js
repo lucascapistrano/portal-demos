@@ -425,7 +425,6 @@ window.onload = function() {
 		geoip: function(geo) {			
 			
 				setTimeout(function() {
-					//geo.date = new Date(geo.date);
 					if (geo.ll)
 						map.placeMarker(geo)
 					active.textContent = visitors
