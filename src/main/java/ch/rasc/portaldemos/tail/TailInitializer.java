@@ -14,11 +14,10 @@ import javax.servlet.annotation.WebListener;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
+import org.joda.time.DateTime;
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Room;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import com.maxmind.geoip.Location;
 import com.maxmind.geoip.LookupService;
 
@@ -33,8 +32,6 @@ public class TailInitializer implements ServletContextListener {
 	private LookupService lookupService;
 
 	private Tailer tailer;
-
-	private final Multiset<LatLng> locations = HashMultiset.create();
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -64,10 +61,10 @@ public class TailInitializer implements ServletContextListener {
 		public void handle(String line) {
 
 			App myApp = App.find("/tail");
-			Room myRoom = null;
-			if (myApp != null) {
-				myRoom = myApp.room("tail");
+			if (myApp == null) {
+				return;
 			}
+			Room myRoom = myApp.room("tail");
 
 			Matcher accessLogEntryMatcher = accessLogPattern.matcher(line);
 
@@ -80,13 +77,15 @@ public class TailInitializer implements ServletContextListener {
 			if (!"-".equals(ip) && !"127.0.0.1".equals(ip)) {
 				Location l = lookupService.getLocation(ip);
 				if (l != null) {
-					LatLng latLng = new LatLng(l.latitude, l.longitude);
-					locations.add(latLng);
+					Access access = new Access();
+					access.setIp(ip);
+					access.setDate(DateTime.now().getMillis());
+					access.setCity(l.city);
+					access.setCountry(l.countryName);
+					access.setLl(new float[] { l.latitude, l.longitude });
 
-					if (myRoom != null) {
-						myRoom.send("latlng", latLng);
-						myRoom.set("locations", locations);
-					}
+					myRoom.send("geoip", access);
+
 				}
 			}
 		}
