@@ -6,9 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Apache Access Log Heatmap</title>
 
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="heatmap.js"></script>
-<script src="heatmap-openlayers.js"></script>
+<script src="heatmap-gmaps.js"></script>
 <script src="../portal-1.0rc2.js"></script>
 <script src="../portal-extension.js"></script>
 
@@ -17,51 +17,66 @@
 	width: 700px;
 	height: 400px;
 }
+
 .olControlAttribution {
-    bottom: 0.5em !important;
+	bottom: 0.5em !important;
 }
 </style>
 
 <script type="text/javascript">
 	function init() {
 
-		var map = new OpenLayers.Map('map');
-		var layer = new OpenLayers.Layer.OSM();
-		
-		var heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", map, layer, 
-				{visible: true, radius:10}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
-		map.addLayers([layer, heatmap]);
-		
-		//map.zoomToMaxExtent();
-		map.zoomIn();		
-		
-		var transports = ["sse", "stream", "longpoll"];
+		var myLatlng = new google.maps.LatLng(48.3333, 16.35);
+		// sorry - this demo is a beta
+		// there is lots of work todo
+		// but I don't have enough time for eg redrawing on dragrelease right now
+		var myOptions = {
+			zoom: 2,
+			center: myLatlng,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			disableDefaultUI: false,
+			scrollwheel: true,
+			draggable: true,
+			navigationControl: true,
+			mapTypeControl: false,
+			scaleControl: true,
+			disableDoubleClickZoom: false
+		};
+		var map = new google.maps.Map(document.getElementById("map"), myOptions);
+		var heatmap = new HeatmapOverlay(map, {
+			"radius": 15,
+			"visible": true,
+			"opacity": 60
+		});
+
+		var transports = [ "sse", "stream", "longpoll" ];
 		if (!window.location.search || window.location.search.indexOf('nows') === -1) {
 			transports.unshift("ws");
 		}
-		
-		portal.open("../tail", {sharing: false, transports: transports}).on({
-			latlng: function(data) {
-				if (data instanceof Array) {
-					var transformedData = [];
-					for (var i = 0; i < data.length; i++) {
-						transformedData.push({lonlat: new OpenLayers.LonLat(data[i].lng, data[i].lat)});
+
+		google.maps.event.addListenerOnce(map, "idle", function() {
+			portal.open("../tail", {
+				sharing: false,
+				transports: transports
+			}).on({
+				latlng: function(data) {
+					if (data.max) {
+						heatmap.setDataSet({
+							max: data.max,
+							data: data.data
+						});
+					} else {
+						heatmap.addDataPoint(data.lat, data.lng, 1);
 					}
-					heatmap.setDataSet({data: transformedData});
-				} else {
-					heatmap.addDataPoint(new OpenLayers.LonLat(data.lng, data.lat));
 				}
-			}
+			})
 		});
-		
+
 	}
 </script>
 </head>
 <body onload="init()">
 	<h1 id="title">Apache Access Log Heatmap</h1>
-
 	<div id="map" class="smallmap"></div>
-
-
 </body>
 </html>
