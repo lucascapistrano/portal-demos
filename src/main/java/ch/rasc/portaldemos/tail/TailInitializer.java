@@ -54,7 +54,7 @@ public class TailInitializer implements ServletContextListener {
 			tailers = Lists.newArrayList();
 
 			String logFiles = System.getProperty("TAIL_ACCESS_LOG");
-			for (String logFile : Splitter.on(";").trimResults().split(logFiles)) {
+			for (String logFile : Splitter.on(",").trimResults().split(logFiles)) {
 				Path p = Paths.get(logFile);
 				tailers.add(new Tailer(p.toFile(), new ListenerAdapter()));
 			}
