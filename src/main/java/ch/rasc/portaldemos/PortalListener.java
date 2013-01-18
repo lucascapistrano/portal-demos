@@ -11,7 +11,8 @@ public class PortalListener extends InitializerListener {
 	@Override
 	protected void configure(Options options) {
 		options.packages("ch.rasc.portaldemos.chat", "ch.rasc.portaldemos.scheduler", "ch.rasc.portaldemos.twitter",
-				"ch.rasc.portaldemos.snake", "ch.rasc.portaldemos.grid", "ch.rasc.portaldemos.tail");
+				"ch.rasc.portaldemos.snake", "ch.rasc.portaldemos.grid", "ch.rasc.portaldemos.tail",
+				"ch.rasc.portaldemos.echat");
 	}
 
 }
