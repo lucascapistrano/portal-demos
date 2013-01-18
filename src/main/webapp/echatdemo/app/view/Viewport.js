@@ -29,7 +29,7 @@ Ext.define('chat.view.Viewport', {
 			}) ],
 		}, {
 			xtype: 'container',
-			flex: 2,
+			flex: 1,
 			margins: '10 0 0 0',
 			region: 'center',
 			layout: {
@@ -38,6 +38,7 @@ Ext.define('chat.view.Viewport', {
 			},
 			items: [ {
 				xtype: 'panel',
+				itemId: 'localVideo',
 				margins: '0 5 0 0',
 				flex: 1,
 				title: 'Local'

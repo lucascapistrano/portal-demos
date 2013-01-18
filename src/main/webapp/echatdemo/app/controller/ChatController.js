@@ -11,6 +11,9 @@ Ext.define('chat.controller.ChatController', {
 		chatView: true,
 		sendButton: {
 			click: 'onSendButton'
+		},
+		localVideo: {
+			resize: 'onResize'
 		}
 	},
 	
@@ -46,6 +49,32 @@ Ext.define('chat.controller.ChatController', {
 				me.getChatView().getStore().add(data);
 			}
 		});
+		
+		var size = this.getLocalVideo().getSize();
+		
+		getUserMedia ({video:true, audio:true}, function(localMediaStream) {
+			
+	        var cfg = {
+	            tag   : 'video',
+	            width : size.width,
+	            height: size.height,
+	            src: window.URL.createObjectURL(localMediaStream),
+	            autoplay: 1
+	        };
+
+	        me.video = me.getLocalVideo().body.createChild(cfg);
+
+		}, function(e) {
+			console.log('Reject', e);
+		});
+
+	},
+	
+	onResize: function() {		
+		if (this.video) {
+			var size = this.getLocalVideo().getSize();
+			this.video.set({width: size.width, height: size.height});
+		}
 	},
 	
 	onConnectButton: function() {
