@@ -18,11 +18,13 @@ Ext.define('chat.view.UsersContainer', {
 				itemId: 'usernameTf',
 				fieldLabel: 'Username',
 				labelWidth: 60,
+				enableKeyEvents: true,
 				size: 255
 			}, {
 				xtype: 'button',
 				itemId: 'connectButton',
 				margins: '0 0 0 5',
+				disabled: true,
 				flex: 1,
 				text: 'Connect'
 			} ]

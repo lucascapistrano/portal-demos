@@ -7,9 +7,11 @@ import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 
 import com.github.flowersinthesand.portal.Data;
+import com.github.flowersinthesand.portal.Fn;
 import com.github.flowersinthesand.portal.Handler;
 import com.github.flowersinthesand.portal.Name;
 import com.github.flowersinthesand.portal.On;
+import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 import com.google.common.collect.Maps;
@@ -27,11 +29,22 @@ public class EnhancedChatHandler {
 	@On.close
 	public void close(Socket socket) {
 		System.out.println("closing: " + socket);
-		connectedUsers.remove(socket.param("id"));
+		disconnect(socket, null);
+		room.remove(socket);
+	}
+
+	@On("disconnect")
+	public void disconnect(Socket socket, @Reply Fn.Callback reply) {
+		UserConnection uc = connectedUsers.remove(socket.param("id"));
+		room.send("disconnected", uc);
+
+		if (reply != null) {
+			reply.call();
+		}
 	}
 
 	@On("connect")
-	public void connect(Socket socket, @Data UserConnection newUser) {
+	public void connect(Socket socket, @Data UserConnection newUser, @Reply Fn.Callback reply) {
 
 		UserAgent ua = parser.parse(newUser.getBrowser());
 		if (ua != null) {
@@ -40,6 +53,7 @@ public class EnhancedChatHandler {
 		connectedUsers.put(socket.param("id"), newUser);
 
 		room.send("connected", newUser);
+		reply.call();
 	}
 
 	@On.open

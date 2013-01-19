@@ -28,6 +28,7 @@ Ext.define('chat.view.PublicChatContainer', {
 				xtype: 'textfield',
 				itemId: 'messageTf',
 				disabled: true,
+				enableKeyEvents: true,
 				flex: 1,
 				fieldLabel: 'Message',
 				labelWidth: 55
