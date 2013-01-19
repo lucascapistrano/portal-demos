@@ -32,6 +32,16 @@ Ext.define('chat.controller.ChatController', {
 
 	connected: null,
 
+	pcConfig: {
+		"iceServers": [ {
+			"url": "stun:stun.stunprotocol.org:3478"
+		} ]
+	},
+
+	pcConstraints: {
+		"optional": []
+	},
+
 	init: function() {
 		var me = this;
 
@@ -59,14 +69,14 @@ Ext.define('chat.controller.ChatController', {
 				me.getChatView().getStore().add(data);
 				me.getChatView().up('panel').body.scroll('b', 1000, true);
 			},
-			receiveSdp: Ext.bind(me.receiveSdp, me),
-			receiveIceCandidate: Ext.bind(me.receiveIceCandidate, me)
+			receiveSdp: me.receiveSdp.bind(me),
+			receiveIceCandidate: me.receiveIceCandidate.bind(me)
 		});
 
-		getUserMedia({
+		navigator.getUserMedia({
 			video: true,
-			audio: true
-		}, Ext.bind(me.onUserMediaSuccess, me), Ext.bind(me.onUserMediaFailure, me));
+			audio: !!navigator.webkitGetUserMedia
+		}, me.onUserMediaSuccess.bind(me), me.onUserMediaFailure.bind(me));
 
 	},
 
@@ -142,65 +152,74 @@ Ext.define('chat.controller.ChatController', {
 			this.getStartPeerConnectionButton().setDisabled(true);
 		}
 	},
-	
+
 	onUserMediaSuccess: function(localMediaStream) {
 		this.localMediaStream = localMediaStream;
-		
+
 		var size = this.getLocalVideo().getSize();
 		var cfg = {
 			tag: 'video',
 			width: size.width,
 			height: size.height,
-			src: window.URL.createObjectURL(localMediaStream),
 			autoplay: 1
 		};
 
 		this.localVideoElement = this.getLocalVideo().body.createChild(cfg);
+		this.attachStream(this.localVideoElement.dom, this.localMediaStream);
+	},
+	
+	attachStream: function(video, stream) {
+		if (navigator.webkitGetUserMedia) {
+			video.src = window.URL.createObjectURL(stream);
+		} else {
+			video.mozSrcObject = stream;
+			video.play();
+		}		
 	},
 
 	onUserMediaFailure: function(e) {
 		console.log('Reject', e);
 	},
-	
-	onStartPeerConnectionButton: function() {		
+
+	onStartPeerConnectionButton: function() {
 		this.isCaller = true;
-		this.pc = new webkitRTCPeerConnection(undefined, undefined);
+		this.pc = new RTCPeerConnection(this.pcConfig, this.pcConstraints);
 		this.pc.addStream(this.localMediaStream);
 		var to = this.getConnectedUsersGrid().getSelectionModel().getSelection()[0].get('username');
-		this.pc.createOffer(Ext.bind(this.sendSdp, this, [this.connected, to], true));
+		this.pc.createOffer(this.sendSdp.bind(this, this.connected, to));
 	},
-	
-	sendSdp: function(sdp, from, to) {
+
+	sendSdp: function(from, to, sdp) {
 		sdp.fromUsername = from;
 		sdp.toUsername = to;
-		this.pc.setLocalDescription(sdp);				
+		this.pc.setLocalDescription(sdp);
 		portal.find().send('sendSdp', sdp);
 	},
-	
+
 	receiveSdp: function(sdp) {
 		if (!this.isCaller) {
 			this.isCaller = false;
-			this.pc = new webkitRTCPeerConnection(undefined, undefined);
-			this.pc.addStream(this.localMediaStream);	
+			this.pc = new RTCPeerConnection(this.pcConfig, this.pcConstraints);
+			this.pc.addStream(this.localMediaStream);
 		}
-		
-		this.pc.onicecandidate = Ext.bind(this.onIceCandidate, this, [sdp.fromUsername], true);
-		this.pc.onaddstream = Ext.bind(this.onAddStream, this);	
-		
+
+		this.pc.onicecandidate = this.onIceCandidate.bind(this, sdp.fromUsername);
+		this.pc.onaddstream = this.onAddStream.bind(this);
+
 		this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
-		
+
 		if (!this.isCaller) {
-			this.pc.createAnswer(Ext.bind(this.sendSdp, this, [this.connected, sdp.fromUsername], true));
+			this.pc.createAnswer(this.sendSdp.bind(this, this.connected, sdp.fromUsername));
 		}
 	},
 
-	onIceCandidate: function(candidate, to) {
+	onIceCandidate: function(to, candidate) {
 		if (candidate.candidate) {
 			candidate.candidate.toUsername = to;
 			portal.find().send('sendIceCandidate', candidate.candidate);
 		}
 	},
-	
+
 	receiveIceCandidate: function(candidate) {
 		this.pc.addIceCandidate(new RTCIceCandidate(candidate));
 	},
@@ -211,13 +230,13 @@ Ext.define('chat.controller.ChatController', {
 			tag: 'video',
 			width: size.width,
 			height: size.height,
-			src: window.URL.createObjectURL(event.stream),
 			autoplay: 1
 		};
 
-		this.remoteVideoElement = this.getRemoteVideo().body.createChild(cfg);				
+		this.remoteVideoElement = this.getRemoteVideo().body.createChild(cfg);
+		this.attachStream(this.remoteVideoElement.dom, event.stream);
 	},
-	
+
 	onSendButton: function() {
 		var messageTextField = this.getMessageTf();
 		var text = Ext.String.trim(messageTextField.getValue());
@@ -239,7 +258,7 @@ Ext.define('chat.controller.ChatController', {
 			});
 		}
 	},
-	
+
 	onRemoteVideoResize: function() {
 		if (this.remoteVideoElement) {
 			var size = this.getRemoteVideo().getSize();
