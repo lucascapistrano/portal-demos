@@ -21,22 +21,25 @@ public class EnhancedChatHandler {
 
 	private final UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
 
-	private final Map<String, UserConnection> connectedUsers = Maps.newConcurrentMap();
+	private final Map<String, UserConnection> socketIdToUserMap = Maps.newConcurrentMap();
+
+	private final Map<String, Socket> usernameToSocketMap = Maps.newConcurrentMap();
 
 	@Name("echat")
 	Room room;
 
 	@On.close
 	public void close(Socket socket) {
-		System.out.println("closing: " + socket);
 		disconnect(socket, null);
-		room.remove(socket);
 	}
 
 	@On("disconnect")
 	public void disconnect(Socket socket, @Reply Fn.Callback reply) {
-		UserConnection uc = connectedUsers.remove(socket.param("id"));
-		room.send("disconnected", uc);
+		UserConnection uc = socketIdToUserMap.remove(socket.param("id"));
+		if (uc != null) {
+			room.send("disconnected", uc);
+			usernameToSocketMap.remove(uc.getUsername());
+		}
 
 		if (reply != null) {
 			reply.call();
@@ -50,7 +53,8 @@ public class EnhancedChatHandler {
 		if (ua != null) {
 			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().toVersionString());
 		}
-		connectedUsers.put(socket.param("id"), newUser);
+		socketIdToUserMap.put(socket.param("id"), newUser);
+		usernameToSocketMap.put(newUser.getUsername(), socket);
 
 		room.send("connected", newUser);
 		reply.call();
@@ -59,12 +63,30 @@ public class EnhancedChatHandler {
 	@On.open
 	public void open(Socket socket) {
 		room.add(socket);
-		socket.send("connectedUsers", connectedUsers.values());
+		socket.send("connectedUsers", socketIdToUserMap.values());
 	}
 
 	@On.message
 	public void message(@Data ChatMessage message) {
 		room.send("message", message);
+	}
+
+	@On("sendSdp")
+	public void sendSdp(@Data Map<String, Object> offerObject) {
+		String toUsername = (String) offerObject.get("toUsername");
+		Socket peerSocket = usernameToSocketMap.get(toUsername);
+		if (peerSocket != null) {
+			peerSocket.send("receiveSdp", offerObject);
+		}
+	}
+
+	@On("sendIceCandidate")
+	public void sendIceCandidate(@Data Map<String, Object> candidate) {
+		String toUsername = (String) candidate.get("toUsername");
+		Socket peerSocket = usernameToSocketMap.get(toUsername);
+		if (peerSocket != null) {
+			peerSocket.send("receiveIceCandidate", candidate);
+		}
 	}
 
 }

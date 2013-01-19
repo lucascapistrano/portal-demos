@@ -44,6 +44,7 @@ Ext.define('chat.view.Viewport', {
 				title: 'Local'
 			}, {
 				xtype: 'panel',
+				itemId: 'remoteVideo',
 				flex: 1,
 				title: 'Remote'
 			} ]

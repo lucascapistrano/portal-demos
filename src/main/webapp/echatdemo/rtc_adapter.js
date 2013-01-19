@@ -38,12 +38,12 @@ if (navigator.mozGetUserMedia) {
   if (!webkitMediaStream.prototype.getVideoTracks) {
     webkitMediaStream.prototype.getVideoTracks = function() {
       return this.videoTracks;
-    }
+    };
   }
   if (!webkitMediaStream.prototype.getAudioTracks) {
     webkitMediaStream.prototype.getAudioTracks = function() {
       return this.audioTracks;
-    }
+    };
   }
 } else {
   console.log("Browser does not appear to be WebRTC-capable");

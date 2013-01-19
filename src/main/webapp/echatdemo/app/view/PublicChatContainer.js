@@ -11,10 +11,10 @@ Ext.define('chat.view.PublicChatContainer', {
 			region: 'center',
 			title: 'Public Chat',
 			bodyPadding: 5,
+			autoScroll: true,
 			items: [ new Ext.view.View({
 				store : Ext.create('chat.store.ChatMessageStore'),
-				itemId: 'chatView',
-				autoScroll: true,
+				itemId: 'chatView',				
 				tpl: new Ext.XTemplate('<tpl for=".">', '<p>{username}: {message}</p>', '</tpl>')
 			}) ]
 		}, {
