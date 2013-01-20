@@ -1,10 +1,22 @@
 package ch.rasc.portaldemos.echat;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
 
 import net.sf.uadetector.UserAgent;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.Fn;
@@ -18,6 +30,12 @@ import com.google.common.collect.Maps;
 
 @Handler("/echat")
 public class EnhancedChatHandler {
+
+	private static final String DATA_IMAGE = "data:image/png;base64,";
+
+	private final static Logger logger = LoggerFactory.getLogger(EnhancedChatHandler.class);
+
+	private final static ObjectMapper mapper = new ObjectMapper();
 
 	private final UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
 
@@ -51,7 +69,7 @@ public class EnhancedChatHandler {
 
 		UserAgent ua = parser.parse(newUser.getBrowser());
 		if (ua != null) {
-			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().toVersionString());
+			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().getMajor());
 		}
 		socketIdToUserMap.put(socket.param("id"), newUser);
 		usernameToSocketMap.put(newUser.getUsername(), socket);
@@ -78,6 +96,14 @@ public class EnhancedChatHandler {
 		if (peerSocket != null) {
 			peerSocket.send("receiveSdp", offerObject);
 		}
+
+		if (logger.isDebugEnabled()) {
+			try {
+				logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(offerObject));
+			} catch (IOException e) {
+				// ignore this
+			}
+		}
 	}
 
 	@On("sendIceCandidate")
@@ -87,6 +113,41 @@ public class EnhancedChatHandler {
 		if (peerSocket != null) {
 			peerSocket.send("receiveIceCandidate", candidate);
 		}
+
+		if (logger.isDebugEnabled()) {
+			try {
+				logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(candidate));
+			} catch (IOException e) {
+				// ignore this
+			}
+		}
 	}
 
+	@On("snapshot")
+	public void snapshot(Socket socket, @Data String image) {
+		UserConnection uc = socketIdToUserMap.get(socket.param("id"));
+		if (uc != null && image.startsWith(DATA_IMAGE)) {
+			try {
+				byte[] imageBytes = DatatypeConverter.parseBase64Binary(image.substring(DATA_IMAGE.length()));
+				String resizedImageDataURL = resize(imageBytes);
+				uc.setImage(resizedImageDataURL);
+				room.send("snapshot", uc);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	private static String resize(byte[] imageData) throws IOException {
+		try (ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
+				ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+			BufferedImage image = ImageIO.read(bis);
+
+			BufferedImage resizedImage = Scalr.resize(image, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 40,
+					Scalr.OP_ANTIALIAS);
+			ImageIO.write(resizedImage, "png", bos);
+			return DATA_IMAGE + DatatypeConverter.printBase64Binary(bos.toByteArray());
+		}
+	}
 }

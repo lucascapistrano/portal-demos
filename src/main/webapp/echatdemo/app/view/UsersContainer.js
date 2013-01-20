@@ -35,6 +35,14 @@ Ext.define('chat.view.UsersContainer', {
 			title: 'Connected Users',
 			store: Ext.create('chat.store.UserStore'),
 			columns: [ {
+				dataIndex: 'image',
+				width: 45,
+				text: '',
+				sortable: false,
+				renderer: function(val) {
+					return '<img src="' + val + '">';
+				}
+			}, {
 				dataIndex: 'username',
 				flex: 1,
 				text: 'User'

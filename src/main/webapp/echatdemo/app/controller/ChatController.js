@@ -3,7 +3,7 @@ Ext.define('chat.controller.ChatController', {
 
 	control: {
 		connectButton: {
-			click: 'onConnectButton'
+			click: 'onConnectButtonClick'
 		},
 		usernameTf: {
 			keypress: 'onUsernameTfKeypress',
@@ -22,12 +22,8 @@ Ext.define('chat.controller.ChatController', {
 		sendButton: {
 			click: 'onSendButton'
 		},
-		localVideo: {
-			resize: 'onLocalVideoResize'
-		},
-		remoteVideo: {
-			resize: 'onRemoteVideoResize'
-		}
+		localVideo: true,
+		remoteVideo: true
 	},
 
 	connected: null,
@@ -69,6 +65,12 @@ Ext.define('chat.controller.ChatController', {
 				me.getChatView().getStore().add(data);
 				me.getChatView().up('panel').body.scroll('b', 1000, true);
 			},
+			snapshot: function(data) {
+				var userStore = me.getConnectedUsersGrid().getStore();
+				var record = userStore.getById(data.username);
+				record.set('image', data.image);
+				record.commit();
+			},
 			receiveSdp: me.receiveSdp.bind(me),
 			receiveIceCandidate: me.receiveIceCandidate.bind(me)
 		});
@@ -78,12 +80,16 @@ Ext.define('chat.controller.ChatController', {
 			audio: !!navigator.webkitGetUserMedia
 		}, me.onUserMediaSuccess.bind(me), me.onUserMediaFailure.bind(me));
 
+		me.snapshotCanvas = document.querySelector('#snapshotCanvas');
+		me.snapshotContext = me.snapshotCanvas.getContext('2d');
+
 	},
 
-	onConnectButton: function() {
+	onConnectButtonClick: function() {
 		var me = this;
 
 		if (me.connected) {
+			me.stopSnapshotTask();
 			portal.find().send('disconnect', null, function() {
 				me.getUsernameTf().setDisabled(false);
 
@@ -109,6 +115,7 @@ Ext.define('chat.controller.ChatController', {
 					me.connected = username;
 					me.getConnectButton().setText('Disconnect');
 					me.getUsernameTf().setDisabled(true);
+					me.startSnapshotTask();
 				});
 			} else {
 				Ext.Msg.show({
@@ -124,7 +131,7 @@ Ext.define('chat.controller.ChatController', {
 	onUsernameTfKeypress: function(tf, e) {
 		if (e.getCharCode() == 13) {
 			e.stopEvent();
-			this.onConnectButton();
+			this.onConnectButtonClick();
 		}
 		return false;
 	},
@@ -146,7 +153,8 @@ Ext.define('chat.controller.ChatController', {
 	},
 
 	onUserSelectionChange: function(grid, selected) {
-		if (this.connected && selected && selected.length > 0 && selected[0].get('username') !== this.connected) {
+		if (!!navigator.getUserMedia && this.connected && selected && selected.length > 0
+				&& selected[0].get('username') !== this.connected) {
 			this.getStartPeerConnectionButton().setDisabled(false);
 		} else {
 			this.getStartPeerConnectionButton().setDisabled(true);
@@ -156,27 +164,58 @@ Ext.define('chat.controller.ChatController', {
 	onUserMediaSuccess: function(localMediaStream) {
 		this.localMediaStream = localMediaStream;
 
-		var size = this.getLocalVideo().getSize();
 		var cfg = {
 			tag: 'video',
-			width: size.width,
-			height: size.height,
+			width: '100%',
+			height: '100%',
 			autoplay: 1
 		};
 
 		this.localVideoElement = this.getLocalVideo().body.createChild(cfg);
 		this.attachStream(this.localVideoElement.dom, this.localMediaStream);
 	},
-	
+
 	attachStream: function(video, stream) {
-		if (navigator.webkitGetUserMedia) {
-			video.src = window.URL.createObjectURL(stream);
-		} else {
+		if (navigator.mozGetUserMedia) {
 			video.mozSrcObject = stream;
 			video.play();
-		}		
+		} else {
+			video.src = window.URL.createObjectURL(stream);
+		}
 	},
 
+	startSnapshotTask: function() {
+		var me = this;
+		var task = {
+			run: function() {
+				if (me.connected) {
+					var imageData = me.takeSnapshot();
+					if (imageData) {
+						portal.find().send("snapshot", imageData);
+					}
+				}
+			},
+			interval: 30000
+		};
+		Ext.TaskManager.start(task);
+	},
+	
+	stopSnapshotTask: function() {
+		Ext.TaskManager.stopAll();
+	},
+
+	takeSnapshot: function() {
+		if (this.localVideoElement) {
+			var video = this.localVideoElement.dom;
+			var canvas = this.snapshotCanvas; 
+			canvas.setAttribute('width', video.videoWidth);
+			canvas.setAttribute('height', video.videoHeight);
+			this.snapshotContext.drawImage(video, 0, 0);
+		    return canvas.toDataURL('image/png');
+		}
+		return null;
+	},
+	
 	onUserMediaFailure: function(e) {
 		console.log('Reject', e);
 	},
@@ -225,11 +264,10 @@ Ext.define('chat.controller.ChatController', {
 	},
 
 	onAddStream: function(event) {
-		var size = this.getRemoteVideo().getSize();
 		var cfg = {
 			tag: 'video',
-			width: size.width,
-			height: size.height,
+			width: '100%',
+			height: '100%',
 			autoplay: 1
 		};
 
@@ -247,26 +285,6 @@ Ext.define('chat.controller.ChatController', {
 			});
 		}
 		messageTextField.setValue('');
-	},
-
-	onLocalVideoResize: function() {
-		if (this.localVideoElement) {
-			var size = this.getLocalVideo().getSize();
-			this.localVideoElement.set({
-				width: size.width,
-				height: size.height
-			});
-		}
-	},
-
-	onRemoteVideoResize: function() {
-		if (this.remoteVideoElement) {
-			var size = this.getRemoteVideo().getSize();
-			this.remoteVideoElement.set({
-				width: size.width,
-				height: size.height
-			});
-		}
-	},
+	}
 
 });

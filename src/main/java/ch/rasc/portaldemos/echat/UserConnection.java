@@ -5,6 +5,8 @@ public class UserConnection {
 
 	private String browser;
 
+	private String image;
+
 	public String getUsername() {
 		return username;
 	}
@@ -21,9 +23,12 @@ public class UserConnection {
 		this.browser = browser;
 	}
 
-	@Override
-	public String toString() {
-		return "UserConnection [username=" + username + ", browser=" + browser + "]";
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

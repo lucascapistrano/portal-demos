@@ -9,5 +9,8 @@ Ext.define('chat.model.User', {
 	}, {
 		name: 'browser',
 		type: 'string'
-	} ]
+	}, {
+		name: 'image',
+		type: 'string'
+	}]
 });
