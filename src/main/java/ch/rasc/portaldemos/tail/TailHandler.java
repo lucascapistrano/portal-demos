@@ -1,15 +1,15 @@
 package ch.rasc.portaldemos.tail;
 
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 
-@Handler("/tail")
+@Bean
 public class TailHandler {
 
-	@Name("tail")
+	@Wire("tail")
 	Room room;
 
 	@On.open

@@ -4,19 +4,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 import com.google.common.collect.ImmutableList;
 
-@Handler("/map")
+@Bean
 public class MapHandler {
 
 	private static ScheduledExecutorService threadPool;
 
-	@Name("map")
+	@Wire("map")
 	Room room;
 
 	@On.close

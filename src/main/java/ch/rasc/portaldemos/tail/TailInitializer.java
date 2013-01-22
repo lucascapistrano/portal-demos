@@ -45,9 +45,12 @@ public class TailInitializer implements ServletContextListener {
 	private LookupService lookupService;
 
 	private List<Tailer> tailers;
+	
+	private App app;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
+		app = new App(new Options().url("/tail").packages("ch.rasc.portaldemos.tail").beans(event.getServletContext())).register();
 
 		try {
 			lookupService = new LookupService(System.getProperty("TAIL_GEOCITY_DAT"), LookupService.GEOIP_INDEX_CACHE);
@@ -66,7 +69,6 @@ public class TailInitializer implements ServletContextListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -80,12 +82,7 @@ public class TailInitializer implements ServletContextListener {
 	private class ListenerAdapter extends TailerListenerAdapter {
 		@Override
 		public void handle(String line) {
-
-			App myApp = App.find("/tail");
-			if (myApp == null) {
-				return;
-			}
-			Room myRoom = myApp.room("tail");
+			Room myRoom = app.room("tail");
 
 			Matcher matcher = accessLogPattern.matcher(line);
 			if (!matcher.matches()) {
@@ -123,7 +120,6 @@ public class TailInitializer implements ServletContextListener {
 					access.setLl(new float[] { l.latitude, l.longitude });
 
 					myRoom.send("geoip", access);
-
 				}
 			}
 		}

@@ -14,6 +14,7 @@ public class SpringInitializer implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+		new App(new Options().url("/twitter").packages("ch.rasc.portaldemos.twitter").beans(event.getServletContext(), ctx)).register();
 	}
 
 	@Override

@@ -1,16 +1,16 @@
 package ch.rasc.portaldemos.chat;
 
 import com.github.flowersinthesand.portal.Data;
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 
-@Handler("/chat")
+@Bean
 public class ChatHandler {
 
-	@Name("chat")
+	@Wire("chat")
 	Room room;
 
 	@On.close

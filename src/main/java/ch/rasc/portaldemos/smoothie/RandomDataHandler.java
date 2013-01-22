@@ -5,20 +5,20 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 
-@Handler("/smoothie")
+@Bean
 public class RandomDataHandler {
 
 	private static ScheduledExecutorService threadPool;
 
 	private static Random random = new Random();
 
-	@Name("smoothie")
+	@Wire("smoothie")
 	Room room;
 
 	@On.close

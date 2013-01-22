@@ -20,15 +20,15 @@ import org.slf4j.LoggerFactory;
 
 import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.Fn;
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 import com.google.common.collect.Maps;
 
-@Handler("/echat")
+@Bean
 public class EnhancedChatHandler {
 
 	private static final String DATA_IMAGE = "data:image/png;base64,";
@@ -43,7 +43,7 @@ public class EnhancedChatHandler {
 
 	private final Map<String, Socket> usernameToSocketMap = Maps.newConcurrentMap();
 
-	@Name("echat")
+	@Wire("echat")
 	Room room;
 
 	@On.close

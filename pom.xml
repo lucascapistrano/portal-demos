@@ -32,19 +32,25 @@
 		<dependency>
 			<groupId>com.github.flowersinthesand</groupId>
 			<artifactId>portal-core</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.flowersinthesand</groupId>
 			<artifactId>portal-atmosphere</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>atmosphere-compat-tomcat7</artifactId>
 					<groupId>org.atmosphere</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.flowersinthesand</groupId>
+			<artifactId>portal-spring</artifactId>
+			<version>0.3</version>
 		</dependency>
 
 		<dependency>

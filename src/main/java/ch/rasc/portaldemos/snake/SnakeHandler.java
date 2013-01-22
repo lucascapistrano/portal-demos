@@ -31,14 +31,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 import com.google.common.collect.ImmutableMap;
 
-@Handler("/snake")
+@Bean
 public class SnakeHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(SnakeHandler.class);
@@ -70,7 +70,7 @@ public class SnakeHandler {
 		}, TICK_DELAY, TICK_DELAY);
 	}
 
-	@Name("snake")
+	@Wire("snake")
 	Room room;
 
 	@On.open

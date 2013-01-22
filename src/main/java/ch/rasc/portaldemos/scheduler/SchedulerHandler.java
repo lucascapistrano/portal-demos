@@ -8,19 +8,19 @@ import java.util.Map;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.github.flowersinthesand.portal.Data;
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 import com.google.common.collect.ImmutableMap;
 
-@Handler("/sch")
+@Bean
 public class SchedulerHandler {
 
 	private final static ObjectMapper mapper = new ObjectMapper();
 
-	@Name("scheduler")
+	@Wire("scheduler")
 	Room room;
 
 	@On.open

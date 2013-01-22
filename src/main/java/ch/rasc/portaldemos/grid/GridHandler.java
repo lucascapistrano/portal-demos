@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.Fn;
-import com.github.flowersinthesand.portal.Handler;
-import com.github.flowersinthesand.portal.Name;
+import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
@@ -15,10 +15,10 @@ import com.github.flowersinthesand.portal.Socket;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
-@Handler("/grid")
+@Bean
 public class GridHandler {
 
-	@Name("grid")
+	@Wire("grid")
 	Room room;
 
 	@On.close
