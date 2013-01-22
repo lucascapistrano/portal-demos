@@ -2,7 +2,7 @@ package ch.rasc.portaldemos.smoothie;
 
 public class CpuData {
 
-	private long time = System.currentTimeMillis();
+	private final long time = System.currentTimeMillis();
 
 	private double[] host1;
 
