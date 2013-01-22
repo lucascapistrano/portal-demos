@@ -5,7 +5,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Handler;
 import com.github.flowersinthesand.portal.Name;
 import com.github.flowersinthesand.portal.On;
@@ -52,7 +51,7 @@ public class RandomDataHandler {
 					random.nextDouble() });
 			cpuData.setHost4(new double[] { random.nextDouble(), random.nextDouble(), random.nextDouble(),
 					random.nextDouble() });
-			App.find("/smoothie").room("smoothie").send("cpu", cpuData);
+			room.send("cpu", cpuData);
 
 		}
 	}
