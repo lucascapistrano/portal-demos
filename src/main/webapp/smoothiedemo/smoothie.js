@@ -54,7 +54,7 @@ function TimeSeries(options) {
 
   // Start a resetBounds Interval timer desired
   if (options.resetBounds) {
-    this.boundsTimer = setInterval((function(thisObj) { return function() { thisObj.resetBounds(); } })(this), options.resetBoundsInterval);
+    this.boundsTimer = setInterval((function(thisObj) { return function() { thisObj.resetBounds(); }; })(this), options.resetBoundsInterval);
   }
 }
 
@@ -125,7 +125,7 @@ SmoothieChart.prototype.stop = function() {
 
 // Sample timestamp formatting function 
 SmoothieChart.timeFormatter = function(dateObject) {
-  function pad2(number){return (number < 10 ? '0' : '') + number};
+  function pad2(number){return (number < 10 ? '0' : '') + number;}
   return pad2(dateObject.getHours())+':'+pad2(dateObject.getMinutes())+':'+pad2(dateObject.getSeconds());
 };
 
@@ -325,4 +325,4 @@ SmoothieChart.prototype.render = function(canvas, time) {
   }
 
   canvasContext.restore(); // See .save() above.
-}
+};

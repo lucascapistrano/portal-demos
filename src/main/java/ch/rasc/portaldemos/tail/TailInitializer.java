@@ -23,6 +23,7 @@ import org.apache.commons.io.input.TailerListenerAdapter;
 import org.joda.time.DateTime;
 
 import com.github.flowersinthesand.portal.App;
+import com.github.flowersinthesand.portal.Options;
 import com.github.flowersinthesand.portal.Room;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -45,12 +46,13 @@ public class TailInitializer implements ServletContextListener {
 	private LookupService lookupService;
 
 	private List<Tailer> tailers;
-	
+
 	private App app;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		app = new App(new Options().url("/tail").packages("ch.rasc.portaldemos.tail").beans(event.getServletContext())).register();
+		app = new App(new Options().url("/tail").packages("ch.rasc.portaldemos.tail").beans(sce.getServletContext()))
+				.register();
 
 		try {
 			lookupService = new LookupService(System.getProperty("TAIL_GEOCITY_DAT"), LookupService.GEOIP_INDEX_CACHE);
@@ -73,10 +75,15 @@ public class TailInitializer implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		for (Tailer tailer : tailers) {
-			tailer.stop();
+		if (tailers != null) {
+			for (Tailer tailer : tailers) {
+				tailer.stop();
+			}
 		}
-		executor.shutdown();
+
+		if (executor != null) {
+			executor.shutdown();
+		}
 	}
 
 	private class ListenerAdapter extends TailerListenerAdapter {

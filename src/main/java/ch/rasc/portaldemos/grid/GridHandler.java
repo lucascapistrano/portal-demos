@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.github.flowersinthesand.portal.Bean;
 import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.Fn;
-import com.github.flowersinthesand.portal.Bean;
-import com.github.flowersinthesand.portal.Wire;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
+import com.github.flowersinthesand.portal.Wire;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 

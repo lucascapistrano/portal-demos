@@ -1,11 +1,11 @@
 package ch.rasc.portaldemos.chat;
 
-import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.Bean;
-import com.github.flowersinthesand.portal.Wire;
+import com.github.flowersinthesand.portal.Data;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
+import com.github.flowersinthesand.portal.Wire;
 
 @Bean
 public class ChatHandler {

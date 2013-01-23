@@ -46,13 +46,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+<!-- 
 		<dependency>
 			<groupId>com.github.flowersinthesand</groupId>
 			<artifactId>portal-spring</artifactId>
 			<version>0.3</version>
 		</dependency>
-
+ -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -128,12 +128,6 @@
 
 		<dependency>
 			<groupId>resources</groupId>
-			<artifactId>extjs</artifactId>
-			<version>4.1.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>resources</groupId>
 			<artifactId>extjs-theme-steelblue</artifactId>
 			<version>1.0.0</version>
 		</dependency>
@@ -157,23 +151,6 @@
 					<source>1.7</source>
 					<target>1.7</target>
 					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>ch.rasc</groupId>
-				<artifactId>embeddedtc-maven-plugin</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>package-tcwar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<finalName>test.jar</finalName>
-					<includeJSPSupport>false</includeJSPSupport>
 				</configuration>
 			</plugin>
 
