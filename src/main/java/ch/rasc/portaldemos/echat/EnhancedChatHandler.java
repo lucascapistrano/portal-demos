@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 
 import net.sf.uadetector.UserAgent;
+import net.sf.uadetector.UserAgentFamily;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 
@@ -70,6 +71,9 @@ public class EnhancedChatHandler {
 		UserAgent ua = parser.parse(newUser.getBrowser());
 		if (ua != null) {
 			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().getMajor());
+			if (ua.getFamily() == UserAgentFamily.CHROME) {
+				newUser.setSupportsWebRTC(true);
+			}
 		}
 		socketIdToUserMap.put(socket.param("id"), newUser);
 		usernameToSocketMap.put(newUser.getUsername(), socket);
@@ -136,6 +140,14 @@ public class EnhancedChatHandler {
 				e.printStackTrace();
 			}
 
+		}
+	}
+	
+	@On("hangup")
+	public void hangup(@Data String toUser) {
+		Socket toUserSocket = usernameToSocketMap.get(toUser);
+		if (toUserSocket != null) {
+			toUserSocket.send("hangup");
 		}
 	}
 

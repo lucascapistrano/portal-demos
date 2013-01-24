@@ -56,8 +56,11 @@ Ext.define('chat.controller.ChatController', {
 			connected: function(data) {
 				me.getConnectedUsersGrid().getStore().add(data);
 			},
+			hangup: function() {
+				me.removeRemoteVideo();
+			},
 			disconnected: function(data) {
-				var userStore = me.getConnectedUsersGrid().getStore();
+				var userStore = me.getConnectedUsersGrid().getStore();				
 				var record = userStore.getById(data.username);
 				userStore.remove(record);
 			},
@@ -75,11 +78,6 @@ Ext.define('chat.controller.ChatController', {
 			receiveIceCandidate: me.receiveIceCandidate.bind(me)
 		});
 
-		navigator.getUserMedia({
-			video: true,
-			audio: !!navigator.webkitGetUserMedia
-		}, me.onUserMediaSuccess.bind(me), me.onUserMediaFailure.bind(me));
-
 		me.snapshotCanvas = document.querySelector('#snapshotCanvas');
 		me.snapshotContext = me.snapshotCanvas.getContext('2d');
 
@@ -88,8 +86,12 @@ Ext.define('chat.controller.ChatController', {
 	onConnectButtonClick: function() {
 		var me = this;
 
-		if (me.connected) {
+		if (me.connected) {			
 			me.stopSnapshotTask();
+
+			me.removeRemoteVideo();
+			me.removeLocalVideo();
+			
 			portal.find().send('disconnect', null, function() {
 				me.getUsernameTf().setDisabled(false);
 
@@ -102,6 +104,12 @@ Ext.define('chat.controller.ChatController', {
 				me.connected = null;
 			});
 		} else {
+			
+			navigator.getUserMedia({
+				video: true,
+				audio: !!navigator.webkitGetUserMedia
+			}, me.onUserMediaSuccess.bind(me), me.onUserMediaFailure.bind(me));
+			
 			var username = me.getUsernameTf().getValue();
 			var userStore = me.getConnectedUsersGrid().getStore();
 			if (username && !userStore.getById(username)) {
@@ -128,6 +136,36 @@ Ext.define('chat.controller.ChatController', {
 		}
 	},
 
+	removeLocalVideo: function() {
+		if (this.localMediaStream) {
+			this.localMediaStream.stop();
+			this.localMediaStream = null;
+		}
+		
+		if (this.localVideoElement) {
+			this.localVideoElement.destroy();
+			this.localVideoElement = null;
+		}		
+	},
+	
+	removeRemoteVideo: function() {
+		this.connectedWith = null;
+		this.isCaller = null;
+
+		this.getStartPeerConnectionButton().setText('Start Peer-to-Peer Connection');
+		this.getStartPeerConnectionButton().setDisabled(true);
+
+		if (this.pc) {
+			this.pc.removeStream(this.localMediaStream);
+			this.pc.close();
+			this.pc = null;
+		}		
+		if (this.remoteVideoElement) {
+			this.remoteVideoElement.destroy();
+			this.remoteVideoElement = null;
+		}		
+	},
+	
 	onUsernameTfKeypress: function(tf, e) {
 		if (e.getCharCode() == 13) {
 			e.stopEvent();
@@ -154,7 +192,7 @@ Ext.define('chat.controller.ChatController', {
 
 	onUserSelectionChange: function(grid, selected) {
 		if (!!navigator.getUserMedia && this.connected && selected && selected.length > 0
-				&& selected[0].get('username') !== this.connected) {
+				&& selected[0].get('username') !== this.connected && selected[0].get('supportsWebRTC')) {
 			this.getStartPeerConnectionButton().setDisabled(false);
 		} else {
 			this.getStartPeerConnectionButton().setDisabled(true);
@@ -220,12 +258,20 @@ Ext.define('chat.controller.ChatController', {
 		console.log('Reject', e);
 	},
 
-	onStartPeerConnectionButton: function() {
-		this.isCaller = true;
-		this.pc = new RTCPeerConnection(this.pcConfig, this.pcConstraints);
-		this.pc.addStream(this.localMediaStream);
-		var to = this.getConnectedUsersGrid().getSelectionModel().getSelection()[0].get('username');
-		this.pc.createOffer(this.sendSdp.bind(this, this.connected, to));
+	onStartPeerConnectionButton: function(button) {
+		if (this.connectedWith) {
+			portal.find().send("hangup", this.connectedWith);
+			this.removeRemoteVideo();
+		} else {
+			button.setText('Hang-up');
+			
+			this.isCaller = true;
+			this.pc = new RTCPeerConnection(this.pcConfig, this.pcConstraints);
+			this.pc.addStream(this.localMediaStream);
+			var to = this.getConnectedUsersGrid().getSelectionModel().getSelection()[0].get('username');
+			this.pc.createOffer(this.sendSdp.bind(this, this.connected, to));
+		}
+
 	},
 
 	sendSdp: function(from, to, sdp) {
@@ -236,15 +282,19 @@ Ext.define('chat.controller.ChatController', {
 	},
 
 	receiveSdp: function(sdp) {
-		if (!this.isCaller) {
+		if (!this.isCaller) {			
 			this.isCaller = false;
 			this.pc = new RTCPeerConnection(this.pcConfig, this.pcConstraints);
 			this.pc.addStream(this.localMediaStream);
 		}
 
+		this.connectedWith = sdp.fromUsername;
+		this.getStartPeerConnectionButton().setDisabled(false);
+		this.getStartPeerConnectionButton().setText('Hang-up');
+		
 		this.pc.onicecandidate = this.onIceCandidate.bind(this, sdp.fromUsername);
 		this.pc.onaddstream = this.onAddStream.bind(this);
-
+		
 		this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
 
 		if (!this.isCaller) {
@@ -274,7 +324,7 @@ Ext.define('chat.controller.ChatController', {
 		this.remoteVideoElement = this.getRemoteVideo().body.createChild(cfg);
 		this.attachStream(this.remoteVideoElement.dom, event.stream);
 	},
-
+	
 	onSendButton: function() {
 		var messageTextField = this.getMessageTf();
 		var text = Ext.String.trim(messageTextField.getValue());

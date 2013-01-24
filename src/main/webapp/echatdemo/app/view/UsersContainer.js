@@ -63,7 +63,7 @@ Ext.define('chat.view.UsersContainer', {
 				xtype: 'button',
 				itemId: 'startPeerConnectionButton',
 				disabled: true,
-				text: 'Start Peer-to-peer Connection'
+				text: 'Start Peer-to-Peer Connection'
 			} ]
 		} ];
 

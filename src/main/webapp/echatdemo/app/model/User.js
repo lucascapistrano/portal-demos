@@ -12,5 +12,8 @@ Ext.define('chat.model.User', {
 	}, {
 		name: 'image',
 		type: 'string'
+	}, {
+		name: 'supportsWebRTC',
+		type: 'boolean'
 	}]
 });

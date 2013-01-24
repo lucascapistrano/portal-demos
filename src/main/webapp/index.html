@@ -93,6 +93,23 @@
 					  <strong><a class="demolink" href="mapdemo/index.html">Google Maps Demo</a></strong>
 					  <p>Server periodically sends coordinates to the connected clients that moves two car icons on a google maps.</p>
 					</li>
+					<li>
+					  <strong><a class="demolink" href="echatdemo/index.html">Enhanced Chat with WebRTC</a></strong>
+					  <p>
+					  An enhanced chat application with WebRTC. The public chat should work in any browser and is implemented like the simple chat example above.
+					  <br>
+					  The WebRTC part only works in Chrome. Your computer also needs a webcam. Test it with a friend that also has Chrome or 
+					  test it from a single computer by opening two tabs. 
+					  Connect to the chat with different names, then one user selects the other user and clicks the button "Start Peer-to-Peer Connection". 
+					  If everything goes right you should see the video from the other user/tab on the right.<br>  
+					  The SDP and ICE messages between the two peers are exchanged with portal. As soon as the connection is established it's a peer to peer connection that 
+					  no longer needs a server. For more information about WebRTC see the article on <a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/">html5rocks</a>.
+					  <br>
+					  The peer-to-peer part should also work over the internet even if both users are behind a NAT/Firewall. The application uses a STUN server (stun.stunprotocol.org) for external ip and port discovery.
+					  But it may not work everywhere. When NAT 'hole punching' fails it needs a TURN server to relay the traffic, but I haven't found a free and public available 
+					  TURN server that I could use for this demo.
+					  </p>
+					</li>					
 				</ul>
 			</section>
 

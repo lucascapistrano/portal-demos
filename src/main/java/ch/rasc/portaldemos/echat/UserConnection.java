@@ -7,6 +7,8 @@ public class UserConnection {
 
 	private String image;
 
+	private boolean supportsWebRTC;
+
 	public String getUsername() {
 		return username;
 	}
@@ -29,6 +31,14 @@ public class UserConnection {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public boolean isSupportsWebRTC() {
+		return supportsWebRTC;
+	}
+
+	public void setSupportsWebRTC(boolean supportsWebRTC) {
+		this.supportsWebRTC = supportsWebRTC;
 	}
 
 }
