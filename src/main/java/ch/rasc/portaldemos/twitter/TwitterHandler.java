@@ -17,7 +17,7 @@ public class TwitterHandler {
 	@Wire
 	Room room;
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 

@@ -21,18 +21,18 @@ public class GridHandler {
 	@Wire
 	Room room;
 
-	@On.close
+	@On
 	public void close(Socket socket) {
 		System.out.println("closing: " + socket);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
 
-	@On("bookRead")
-	public void bookCreate(@Data StoreReadRequest readRequest, @Reply Fn.Callback1<Collection<Book>> reply) {
+	@On
+	public void bookRead(@Data StoreReadRequest readRequest, @Reply Fn.Callback1<Collection<Book>> reply) {
 		Collection<Book> list = BookDb.list();
 
 		Ordering<Book> ordering = PropertyOrderingFactory.createOrderingFromSorters(readRequest.getSorters());
@@ -43,7 +43,7 @@ public class GridHandler {
 		}
 	}
 
-	@On("bookCreate")
+	@On
 	public void bookCreate(Socket socket, @Data Book[] books, @Reply Fn.Callback1<List<Book>> reply) {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
@@ -55,7 +55,7 @@ public class GridHandler {
 		reply.call(result);
 	}
 
-	@On("bookUpdate")
+	@On
 	public void bookUpdate(Socket socket, @Data Book[] books, @Reply Fn.Callback1<List<Book>> reply) {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
@@ -67,7 +67,7 @@ public class GridHandler {
 		reply.call(result);
 	}
 
-	@On("bookDestroy")
+	@On
 	public void bookDestroy(Socket socket, @Data Integer[] bookIds, @Reply Fn.Callback1<Boolean> reply) {
 		BookDb.delete(Arrays.asList(bookIds));
 		room.out(socket).send("bookDestroyed", bookIds);

@@ -47,12 +47,12 @@ public class EnhancedChatHandler {
 	@Wire
 	Room room;
 
-	@On.close
+	@On
 	public void close(Socket socket) {
 		disconnect(socket, null);
 	}
 
-	@On("disconnect")
+	@On
 	public void disconnect(Socket socket, @Reply Fn.Callback reply) {
 		UserConnection uc = socketIdToUserMap.remove(socket.param("id"));
 		if (uc != null) {
@@ -65,7 +65,7 @@ public class EnhancedChatHandler {
 		}
 	}
 
-	@On("connect")
+	@On
 	public void connect(Socket socket, @Data UserConnection newUser, @Reply Fn.Callback reply) {
 
 		UserAgent ua = parser.parse(newUser.getBrowser());
@@ -82,18 +82,18 @@ public class EnhancedChatHandler {
 		reply.call();
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 		socket.send("connectedUsers", socketIdToUserMap.values());
 	}
 
-	@On.message
+	@On
 	public void message(@Data ChatMessage message) {
 		room.send("message", message);
 	}
 
-	@On("sendSdp")
+	@On
 	public void sendSdp(@Data Map<String, Object> offerObject) {
 		String toUsername = (String) offerObject.get("toUsername");
 		Socket peerSocket = usernameToSocketMap.get(toUsername);
@@ -110,7 +110,7 @@ public class EnhancedChatHandler {
 		}
 	}
 
-	@On("sendIceCandidate")
+	@On
 	public void sendIceCandidate(@Data Map<String, Object> candidate) {
 		String toUsername = (String) candidate.get("toUsername");
 		Socket peerSocket = usernameToSocketMap.get(toUsername);
@@ -127,7 +127,7 @@ public class EnhancedChatHandler {
 		}
 	}
 
-	@On("snapshot")
+	@On
 	public void snapshot(Socket socket, @Data String image) {
 		UserConnection uc = socketIdToUserMap.get(socket.param("id"));
 		if (uc != null && image.startsWith(DATA_IMAGE)) {
@@ -143,7 +143,7 @@ public class EnhancedChatHandler {
 		}
 	}
 	
-	@On("hangup")
+	@On
 	public void hangup(@Data String toUser) {
 		Socket toUserSocket = usernameToSocketMap.get(toUser);
 		if (toUserSocket != null) {

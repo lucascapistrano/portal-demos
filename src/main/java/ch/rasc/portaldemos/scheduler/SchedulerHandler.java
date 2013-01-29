@@ -23,13 +23,13 @@ public class SchedulerHandler {
 	@Wire
 	Room room;
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
 
-	@On("client_doInitialLoad")
-	public void doInitialLoad(Socket socket, @Data Map<String, Object> data) {
+	@On
+	public void client_doInitialLoad(Socket socket, @Data Map<String, Object> data) {
 		String storeType = (String) data.get("storeType");
 
 		Map<String, Object> result = new HashMap<>();
@@ -43,8 +43,8 @@ public class SchedulerHandler {
 	}
 
 	// Update records in DB and inform other clients about the change
-	@On("client_doUpdate")
-	public void doUpdate(Socket socket, @Data Map<String, Object> msg) {
+	@On
+	public void client_doUpdate(Socket socket, @Data Map<String, Object> msg) {
 		String storeType = (String) msg.get("storeType");
 		List<Map<String, Object>> records = (List<Map<String, Object>>) msg.get("records");
 
@@ -62,8 +62,8 @@ public class SchedulerHandler {
 	}
 
 	// Add record to DB and inform other clients about the change
-	@On("client_doAdd")
-	public void doAdd(Socket socket, @Data Map<String, Object> msg) {
+	@On
+	public void client_doAdd(Socket socket, @Data Map<String, Object> msg) {
 		String storeType = (String) msg.get("storeType");
 		List<Map<String, Object>> records = (List<Map<String, Object>>) msg.get("records");
 
@@ -95,8 +95,8 @@ public class SchedulerHandler {
 	}
 
 	// Remove record from DB and inform other clients about the change
-	@On("client_doRemove")
-	public void doRemove(Socket socket, @Data Map<String, Object> msg) {
+	@On
+	public void client_doRemove(Socket socket, @Data Map<String, Object> msg) {
 		String storeType = (String) msg.get("storeType");
 		List<Integer> ids = (List<Integer>) msg.get("ids");
 

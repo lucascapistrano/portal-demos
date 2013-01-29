@@ -23,7 +23,7 @@ public class MapHandler {
 				TimeUnit.MILLISECONDS);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}

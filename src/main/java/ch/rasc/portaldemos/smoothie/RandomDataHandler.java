@@ -21,7 +21,7 @@ public class RandomDataHandler {
 		SmoothieInitializer.threadPool.scheduleWithFixedDelay(new RandomDataGenerator(), 1, 1, TimeUnit.SECONDS);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}

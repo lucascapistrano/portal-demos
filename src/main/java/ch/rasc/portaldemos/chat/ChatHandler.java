@@ -13,17 +13,17 @@ public class ChatHandler {
 	@Wire
 	Room room;
 
-	@On.close
+	@On
 	public void close(Socket socket) {
 		System.out.println("closing: " + socket);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
 
-	@On.message
+	@On
 	public void message(@Data ChatMessage message) {
 		room.send("message", message);
 	}

@@ -73,7 +73,7 @@ public class SnakeHandler {
 	@Wire
 	Room room;
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		String id = socket.param("id");
 		Snake snake = new Snake(id, socket);
@@ -89,27 +89,27 @@ public class SnakeHandler {
 		room.send("join", snakesObjects);
 	}
 
-	@On("north")
+	@On
 	public void north(Socket socket) {
 		snakes.get(socket.param("id")).setDirection(Direction.NORTH);
 	}
 
-	@On("west")
+	@On
 	public void west(Socket socket) {
 		snakes.get(socket.param("id")).setDirection(Direction.WEST);
 	}
 
-	@On("east")
+	@On
 	public void east(Socket socket) {
 		snakes.get(socket.param("id")).setDirection(Direction.EAST);
 	}
 
-	@On("south")
+	@On
 	public void south(Socket socket) {
 		snakes.get(socket.param("id")).setDirection(Direction.SOUTH);
 	}
 
-	@On.close
+	@On
 	public void close(Socket socket) {
 		Snake removedSnake = snakes.remove(socket.param("id"));
 		room.remove(socket);
