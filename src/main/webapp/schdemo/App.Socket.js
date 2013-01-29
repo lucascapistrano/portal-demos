@@ -11,7 +11,7 @@ Ext.define('App.Socket', {
 			transports.unshift("ws");
 		}
 		
-		portal.open("../sch", {transports: transports, sharing: false}).on({
+		portal.open("../sch", {transports: transports}).on({
 			open: function() {
 				Ext.get('transport').setHTML('Transport: ' + this.data("transport"));
 			},

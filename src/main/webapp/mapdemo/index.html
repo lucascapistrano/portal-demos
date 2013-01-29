@@ -33,10 +33,7 @@
         	transports.unshift("ws");
         }        
         
-        portal.open("../map", {
-        	sharing: false,
-        	transports: transports
-        }).on({
+        portal.open("../map", {transports: transports}).on({
         	driveBlue: function(latlng) {			  
         		if (!blueCar) {
 	        		blueCar = new google.maps.Marker({

@@ -115,7 +115,7 @@
         		transports.unshift("ws");
         	}
         	
-        	portal.open("../snake", {transports: transports, sharing: false}).on({
+        	portal.open("../snake", {transports: transports}).on({
         		open: function() {
                     // Socket open.. start the game loop.
                     Console.log('Info: Connection opened.');

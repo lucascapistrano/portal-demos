@@ -46,10 +46,7 @@ Ext.define('chat.controller.ChatController', {
 			transports.unshift("ws");
 		}
 
-		portal.open("../echat", {
-			transports: transports,
-			sharing: false
-		}).on({
+		portal.open("../echat", {transports: transports}).on({
 			connectedUsers: function(data) {
 				me.getConnectedUsersGrid().getStore().add(data);
 			},
