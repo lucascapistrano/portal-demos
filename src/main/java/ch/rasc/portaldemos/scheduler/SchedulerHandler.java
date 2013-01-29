@@ -20,18 +20,16 @@ public class SchedulerHandler {
 
 	private final static ObjectMapper mapper = new ObjectMapper();
 
-	@Wire("scheduler")
+	@Wire
 	Room room;
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
 
-	@On("client_doInitialLoad")
-	public void doInitialLoad(Socket socket, @Data Map<String, Object> data) {
-		String storeType = (String) data.get("storeType");
-
+	@On
+	public void client_doInitialLoad(Socket socket, @Data("storeType") String storeType) {
 		Map<String, Object> result = new HashMap<>();
 		if (storeType.equals("resource")) {
 			result.put("data", ResourceDb.list());
@@ -43,8 +41,8 @@ public class SchedulerHandler {
 	}
 
 	// Update records in DB and inform other clients about the change
-	@On("client_doUpdate")
-	public void doUpdate(Socket socket, @Data Map<String, Object> msg) {
+	@On
+	public void client_doUpdate(Socket socket, @Data Map<String, Object> msg) {
 		String storeType = (String) msg.get("storeType");
 		List<Map<String, Object>> records = (List<Map<String, Object>>) msg.get("records");
 
@@ -58,15 +56,12 @@ public class SchedulerHandler {
 			}
 		}
 
-		sendToAllButMe(socket, "server_doUpdate", msg);
+		room.out(socket).send("server_doUpdate", msg);
 	}
 
 	// Add record to DB and inform other clients about the change
-	@On("client_doAdd")
-	public void doAdd(Socket socket, @Data Map<String, Object> msg) {
-		String storeType = (String) msg.get("storeType");
-		List<Map<String, Object>> records = (List<Map<String, Object>>) msg.get("records");
-
+	@On
+	public void client_doAdd(Socket socket, @Data("storeType") String storeType, @Data("records") List<Map<String, Object>> records) {
 		List<Object> updatedRecords = new ArrayList<>();
 		List<ImmutableMap<String, ?>> ids = new ArrayList<>();
 
@@ -80,7 +75,6 @@ public class SchedulerHandler {
 				updatedRecords.add(res);
 
 				ids.add(ImmutableMap.of("internalId", internalId, "id", res.getId()));
-
 			} else {
 				Event event = mapper.convertValue(record, Event.class);
 				EventDb.create(event);
@@ -90,30 +84,20 @@ public class SchedulerHandler {
 			}
 		}
 
-		sendToAllButMe(socket, "server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
+		room.out(socket).send("server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
 		socket.send("server_syncId", ImmutableMap.of("ids", ids, "storeType", storeType));
 	}
 
 	// Remove record from DB and inform other clients about the change
-	@On("client_doRemove")
-	public void doRemove(Socket socket, @Data Map<String, Object> msg) {
-		String storeType = (String) msg.get("storeType");
-		List<Integer> ids = (List<Integer>) msg.get("ids");
-
+	@On
+	public void client_doRemove(Socket socket, @Data("storeType") String storeType, @Data("ids") List<Integer> ids) {
 		if (storeType.equals("resource")) {
 			ResourceDb.delete(ids);
 		} else {
 			EventDb.delete(ids);
 		}
 
-		sendToAllButMe(socket, "server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
+		room.out(socket).send("server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
 	}
 
-	private void sendToAllButMe(Socket socket, String event, Object data) {
-		for (Socket s : room.sockets()) {
-			if (s != socket) {
-				s.send(event, data);
-			}
-		}
-	}
 }

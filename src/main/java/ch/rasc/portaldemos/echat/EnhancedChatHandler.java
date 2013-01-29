@@ -44,30 +44,27 @@ public class EnhancedChatHandler {
 
 	private final Map<String, Socket> usernameToSocketMap = Maps.newConcurrentMap();
 
-	@Wire("echat")
+	@Wire
 	Room room;
 
-	@On.close
+	@On
 	public void close(Socket socket) {
-		disconnect(socket, null);
+		disconnect(socket);
 	}
 
-	@On("disconnect")
-	public void disconnect(Socket socket, @Reply Fn.Callback reply) {
+	@On
+	@Reply
+	public void disconnect(Socket socket) {
 		UserConnection uc = socketIdToUserMap.remove(socket.param("id"));
 		if (uc != null) {
 			room.send("disconnected", uc);
 			usernameToSocketMap.remove(uc.getUsername());
 		}
-
-		if (reply != null) {
-			reply.call();
-		}
 	}
 
-	@On("connect")
-	public void connect(Socket socket, @Data UserConnection newUser, @Reply Fn.Callback reply) {
-
+	@On
+	@Reply
+	public void connect(Socket socket, @Data UserConnection newUser) {
 		UserAgent ua = parser.parse(newUser.getBrowser());
 		if (ua != null) {
 			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().getMajor());
@@ -79,21 +76,20 @@ public class EnhancedChatHandler {
 		usernameToSocketMap.put(newUser.getUsername(), socket);
 
 		room.send("connected", newUser);
-		reply.call();
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 		socket.send("connectedUsers", socketIdToUserMap.values());
 	}
 
-	@On.message
+	@On
 	public void message(@Data ChatMessage message) {
 		room.send("message", message);
 	}
 
-	@On("sendSdp")
+	@On
 	public void sendSdp(@Data Map<String, Object> offerObject) {
 		String toUsername = (String) offerObject.get("toUsername");
 		Socket peerSocket = usernameToSocketMap.get(toUsername);
@@ -110,7 +106,7 @@ public class EnhancedChatHandler {
 		}
 	}
 
-	@On("sendIceCandidate")
+	@On
 	public void sendIceCandidate(@Data Map<String, Object> candidate) {
 		String toUsername = (String) candidate.get("toUsername");
 		Socket peerSocket = usernameToSocketMap.get(toUsername);
@@ -127,7 +123,7 @@ public class EnhancedChatHandler {
 		}
 	}
 
-	@On("snapshot")
+	@On
 	public void snapshot(Socket socket, @Data String image) {
 		UserConnection uc = socketIdToUserMap.get(socket.param("id"));
 		if (uc != null && image.startsWith(DATA_IMAGE)) {
@@ -143,7 +139,7 @@ public class EnhancedChatHandler {
 		}
 	}
 	
-	@On("hangup")
+	@On
 	public void hangup(@Data String toUser) {
 		Socket toUserSocket = usernameToSocketMap.get(toUser);
 		if (toUserSocket != null) {

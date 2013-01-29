@@ -14,10 +14,10 @@ import com.github.flowersinthesand.portal.Wire;
 @Component
 public class TwitterHandler {
 
-	@Wire("twitter")
+	@Wire
 	Room room;
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 

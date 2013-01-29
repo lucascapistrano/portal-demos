@@ -35,10 +35,7 @@ if (!window.location.search || window.location.search.indexOf('nows') === -1) {
 	transports.unshift("ws");
 }
 
-portal.open("../smoothie", {
-	sharing: false,
-	transports: transports
-}).on({
+portal.open("../smoothie", {transports: transports}).on({
 	cpu: function(data) {
 		addDataToDataSets(data.time, data.host1, cpuDataSets.host1);
 		addDataToDataSets(data.time, data.host2, cpuDataSets.host2);

@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 @Bean
 public class MapHandler {
 
-	@Wire("map")
+	@Wire
 	Room room;
 
 	@Prepare
@@ -23,7 +23,7 @@ public class MapHandler {
 				TimeUnit.MILLISECONDS);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}

@@ -2,6 +2,7 @@ package ch.rasc.portaldemos.twitter;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,13 @@ public class TwitterReader {
 	public final static String LAST_RECEIVED_TWEETS_KEY = "LAST_RECEIVED_TWEETS";
 
 	private long sinceId = 0;
-
-	@Scheduled(initialDelay = 5000, fixedDelay = 20000)
+	
+	@Autowired
+	private App app;
+	
+	@Scheduled(fixedDelay = 20000)
 	public void readTwitterFeed() throws TwitterException {
-		App myApp = App.find("/twitter");
-		if (myApp == null) {
-			return;
-		}
-
-		Room myRoom = myApp.room("twitter");
+		Room myRoom = app.room("room");
 
 		if (myRoom.size() > 0) {
 			Twitter twitter = TwitterFactory.getSingleton();

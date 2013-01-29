@@ -418,27 +418,20 @@ window.onload = function() {
 		transports.unshift("ws");
 	}
 
-	portal.open("../tail", {
-		sharing: false,
-		transports: transports
-	}).on({
-		geoip: function(geo) {			
-			
-				setTimeout(function() {
-					if (geo.ll)
-						map.placeMarker(geo);
-					active.textContent = visitors;
-					if (geo.message) {
-						messages.add(geo.message);
-						//matches.consider(geo);
-					}
-				}, config.bufferTime);
-			
-
+	portal.open("../tail", {transports: transports}).on({
+		geoip: function(geo) {
+			setTimeout(function() {
+				if (geo.ll)
+					map.placeMarker(geo);
+				active.textContent = visitors;
+				if (geo.message) {
+					messages.add(geo.message);
+					//matches.consider(geo);
+				}
+			}, config.bufferTime);
 		}
 	});
 
-	
 	(function tick() {
 		map.markers.age();
 		dots.tick();

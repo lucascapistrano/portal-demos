@@ -18,67 +18,60 @@ import com.google.common.collect.Ordering;
 @Bean
 public class GridHandler {
 
-	@Wire("grid")
+	@Wire
 	Room room;
 
-	@On.close
+	@On
 	public void close(Socket socket) {
 		System.out.println("closing: " + socket);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
 
-	@On("bookRead")
-	public void bookCreate(@Data StoreReadRequest readRequest, @Reply Fn.Callback1<Collection<Book>> reply) {
+	@On
+	@Reply
+	public Collection<Book> bookRead(@Data StoreReadRequest readRequest) {
 		Collection<Book> list = BookDb.list();
-
 		Ordering<Book> ordering = PropertyOrderingFactory.createOrderingFromSorters(readRequest.getSorters());
-		if (ordering != null) {
-			reply.call(ordering.sortedCopy(list));
-		} else {
-			reply.call(list);
-		}
+		
+		return ordering != null ? ordering.sortedCopy(list) : list;  
 	}
 
-	@On("bookCreate")
-	public void bookCreate(Socket socket, @Data Book[] books, @Reply Fn.Callback1<List<Book>> reply) {
+	@On
+	@Reply
+	public List<Book> bookCreate(Socket socket, @Data Book[] books) {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
 			BookDb.create(book);
 			result.add(book);
 		}
 
-		sendToAllButMe(socket, "bookCreated", result);
-		reply.call(result);
+		room.out(socket).send("bookCreated", result);
+		return result;
 	}
 
-	@On("bookUpdate")
-	public void bookUpdate(Socket socket, @Data Book[] books, @Reply Fn.Callback1<List<Book>> reply) {
+	@On
+	@Reply
+	public List<Book> bookUpdate(Socket socket, @Data Book[] books) {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
 			BookDb.update(book);
 			result.add(book);
 		}
 
-		sendToAllButMe(socket, "bookUpdated", result);
-		reply.call(result);
+		room.out(socket).send("bookUpdated", result);
+		return result;
 	}
 
-	@On("bookDestroy")
-	public void bookDestroy(Socket socket, @Data Integer[] bookIds, @Reply Fn.Callback1<Boolean> reply) {
+	@On
+	@Reply
+	public boolean bookDestroy(Socket socket, @Data Integer[] bookIds) {
 		BookDb.delete(Arrays.asList(bookIds));
-		sendToAllButMe(socket, "bookDestroyed", bookIds);
-		reply.call(true);
+		room.out(socket).send("bookDestroyed", bookIds);
+		return true;
 	}
 
-	private void sendToAllButMe(Socket socket, String event, Object data) {
-		for (Socket s : room.sockets()) {
-			if (s != socket) {
-				s.send(event, data);
-			}
-		}
-	}
 }

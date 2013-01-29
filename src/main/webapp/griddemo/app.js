@@ -6,10 +6,7 @@ Ext.onReady(function() {
 		transports.unshift("ws");
 	}
 
-	portal.open("../grid", {
-		transports: transports,
-		sharing: false
-	});
+	portal.open("../grid", {transports: transports});
 
 	Ext.define('Book', {
 		extend: 'Ext.data.Model',

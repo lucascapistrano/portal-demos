@@ -6,14 +6,14 @@ import javax.servlet.annotation.WebListener;
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
+import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 
 @WebListener
 public class ChatInitializer implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		new App(new Options().url("/chat").packages("ch.rasc.portaldemos.chat").beans(event.getServletContext()))
-				.register();
+		new App(new Options().url("/chat").packageOf(this), new AtmosphereModule(event.getServletContext())).register();
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebListener;
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
+import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 
 @WebListener
 public class MapInitializer implements ServletContextListener {
@@ -17,7 +18,7 @@ public class MapInitializer implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		new App(new Options().url("/map").packages("ch.rasc.portaldemos.map").beans(event.getServletContext()))
+		new App(new Options().url("/map").packageOf(this), new AtmosphereModule(event.getServletContext()))
 				.register();
 	}
 

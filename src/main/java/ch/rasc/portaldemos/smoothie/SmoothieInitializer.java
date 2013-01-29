@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebListener;
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
+import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 
 @WebListener
 public class SmoothieInitializer implements ServletContextListener {
@@ -17,8 +18,8 @@ public class SmoothieInitializer implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		new App(new Options().url("/smoothie").packages("ch.rasc.portaldemos.smoothie")
-				.beans(event.getServletContext())).register();
+		new App(new Options().url("/smoothie").packageOf(this), new AtmosphereModule(event.getServletContext()))
+				.register();
 	}
 
 	@Override

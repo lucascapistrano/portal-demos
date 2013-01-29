@@ -13,7 +13,7 @@ import com.github.flowersinthesand.portal.Wire;
 @Bean
 public class RandomDataHandler {
 
-	@Wire("smoothie")
+	@Wire
 	Room room;
 
 	@Prepare
@@ -21,7 +21,7 @@ public class RandomDataHandler {
 		SmoothieInitializer.threadPool.scheduleWithFixedDelay(new RandomDataGenerator(), 1, 1, TimeUnit.SECONDS);
 	}
 
-	@On.open
+	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
