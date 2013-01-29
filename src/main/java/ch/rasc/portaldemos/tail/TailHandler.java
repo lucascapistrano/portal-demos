@@ -9,7 +9,7 @@ import com.github.flowersinthesand.portal.Wire;
 @Bean
 public class TailHandler {
 
-	@Wire("tail")
+	@Wire
 	Room room;
 
 	@On.open

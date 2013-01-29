@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 @Bean
 public class MapHandler {
 
-	@Wire("map")
+	@Wire
 	Room room;
 
 	@Prepare

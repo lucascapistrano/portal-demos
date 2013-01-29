@@ -70,7 +70,7 @@ public class SnakeHandler {
 		}, TICK_DELAY, TICK_DELAY);
 	}
 
-	@Wire("snake")
+	@Wire
 	Room room;
 
 	@On.open

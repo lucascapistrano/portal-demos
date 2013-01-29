@@ -10,7 +10,7 @@ import com.github.flowersinthesand.portal.Wire;
 @Bean
 public class ChatHandler {
 
-	@Wire("chat")
+	@Wire
 	Room room;
 
 	@On.close

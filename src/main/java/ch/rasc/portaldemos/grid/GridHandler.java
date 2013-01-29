@@ -18,7 +18,7 @@ import com.google.common.collect.Ordering;
 @Bean
 public class GridHandler {
 
-	@Wire("grid")
+	@Wire
 	Room room;
 
 	@On.close

@@ -90,7 +90,7 @@ public class TailInitializer implements ServletContextListener {
 	private class ListenerAdapter extends TailerListenerAdapter {
 		@Override
 		public void handle(String line) {
-			Room myRoom = app.room("tail");
+			Room myRoom = app.room("room");
 
 			Matcher matcher = accessLogPattern.matcher(line);
 			if (!matcher.matches()) {

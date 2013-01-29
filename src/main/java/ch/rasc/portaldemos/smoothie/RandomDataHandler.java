@@ -13,7 +13,7 @@ import com.github.flowersinthesand.portal.Wire;
 @Bean
 public class RandomDataHandler {
 
-	@Wire("smoothie")
+	@Wire
 	Room room;
 
 	@Prepare

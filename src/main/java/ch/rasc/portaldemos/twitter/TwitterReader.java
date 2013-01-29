@@ -29,7 +29,7 @@ public class TwitterReader {
 			return;
 		}
 
-		Room myRoom = myApp.room("twitter");
+		Room myRoom = myApp.room("room");
 
 		if (myRoom.size() > 0) {
 			Twitter twitter = TwitterFactory.getSingleton();

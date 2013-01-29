@@ -44,7 +44,7 @@ public class EnhancedChatHandler {
 
 	private final Map<String, Socket> usernameToSocketMap = Maps.newConcurrentMap();
 
-	@Wire("echat")
+	@Wire
 	Room room;
 
 	@On.close

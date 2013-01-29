@@ -20,7 +20,7 @@ public class SchedulerHandler {
 
 	private final static ObjectMapper mapper = new ObjectMapper();
 
-	@Wire("scheduler")
+	@Wire
 	Room room;
 
 	@On.open
