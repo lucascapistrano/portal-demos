@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
 import com.github.flowersinthesand.portal.Room;
+import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.maxmind.geoip.Location;
@@ -51,7 +52,7 @@ public class TailInitializer implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		app = new App(new Options().url("/tail").packages("ch.rasc.portaldemos.tail").beans(sce.getServletContext()))
+		app = new App(new Options().url("/tail").packageOf(this), new AtmosphereModule(sce.getServletContext()))
 				.register();
 
 		try {

@@ -8,6 +8,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
+import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
+import com.github.flowersinthesand.portal.spring.SpringModule;
 
 @WebListener
 public class SpringInitializer implements ServletContextListener {
@@ -17,8 +19,7 @@ public class SpringInitializer implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
-		new App(new Options().url("/twitter").packages("ch.rasc.portaldemos.twitter")
-				.beans(sce.getServletContext(), ctx)).register();
+		new App(new Options().url("/twitter").packageOf(this), new AtmosphereModule(sce.getServletContext()), new SpringModule(ctx)).register();
 	}
 
 	@Override
