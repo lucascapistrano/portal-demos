@@ -58,7 +58,7 @@ public class SchedulerHandler {
 			}
 		}
 
-		sendToAllButMe(socket, "server_doUpdate", msg);
+		room.out(socket).send("server_doUpdate", msg);
 	}
 
 	// Add record to DB and inform other clients about the change
@@ -90,7 +90,7 @@ public class SchedulerHandler {
 			}
 		}
 
-		sendToAllButMe(socket, "server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
+		room.out(socket).send("server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
 		socket.send("server_syncId", ImmutableMap.of("ids", ids, "storeType", storeType));
 	}
 
@@ -106,14 +106,7 @@ public class SchedulerHandler {
 			EventDb.delete(ids);
 		}
 
-		sendToAllButMe(socket, "server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
+		room.out(socket).send("server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
 	}
 
-	private void sendToAllButMe(Socket socket, String event, Object data) {
-		for (Socket s : room.sockets()) {
-			if (s != socket) {
-				s.send(event, data);
-			}
-		}
-	}
 }

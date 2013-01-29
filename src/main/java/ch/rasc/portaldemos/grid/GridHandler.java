@@ -51,7 +51,7 @@ public class GridHandler {
 			result.add(book);
 		}
 
-		sendToAllButMe(socket, "bookCreated", result);
+		room.out(socket).send("bookCreated", result);
 		reply.call(result);
 	}
 
@@ -63,22 +63,15 @@ public class GridHandler {
 			result.add(book);
 		}
 
-		sendToAllButMe(socket, "bookUpdated", result);
+		room.out(socket).send("bookUpdated", result);
 		reply.call(result);
 	}
 
 	@On("bookDestroy")
 	public void bookDestroy(Socket socket, @Data Integer[] bookIds, @Reply Fn.Callback1<Boolean> reply) {
 		BookDb.delete(Arrays.asList(bookIds));
-		sendToAllButMe(socket, "bookDestroyed", bookIds);
+		room.out(socket).send("bookDestroyed", bookIds);
 		reply.call(true);
 	}
 
-	private void sendToAllButMe(Socket socket, String event, Object data) {
-		for (Socket s : room.sockets()) {
-			if (s != socket) {
-				s.send(event, data);
-			}
-		}
-	}
 }
