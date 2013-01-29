@@ -27,7 +27,7 @@ public class RandomDataHandler {
 	}
 
 	private class RandomDataGenerator implements Runnable {
-		private Random random = new Random();
+		private final Random random = new Random();
 
 		@Override
 		public void run() {

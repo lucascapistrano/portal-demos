@@ -13,8 +13,7 @@ public class GridInitializer implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		new App(new Options().url("/grid").packageOf(this), new AtmosphereModule(event.getServletContext()))
-				.register();
+		new App(new Options().url("/grid").packageOf(this), new AtmosphereModule(event.getServletContext())).register();
 	}
 
 	@Override

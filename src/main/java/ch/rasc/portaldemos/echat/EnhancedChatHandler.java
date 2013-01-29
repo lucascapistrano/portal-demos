@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.flowersinthesand.portal.Bean;
 import com.github.flowersinthesand.portal.Data;
-import com.github.flowersinthesand.portal.Fn;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
@@ -138,7 +137,7 @@ public class EnhancedChatHandler {
 
 		}
 	}
-	
+
 	@On
 	public void hangup(@Data String toUser) {
 		Socket toUserSocket = usernameToSocketMap.get(toUser);

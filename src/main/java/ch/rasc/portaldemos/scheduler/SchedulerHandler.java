@@ -61,7 +61,8 @@ public class SchedulerHandler {
 
 	// Add record to DB and inform other clients about the change
 	@On
-	public void client_doAdd(Socket socket, @Data("storeType") String storeType, @Data("records") List<Map<String, Object>> records) {
+	public void client_doAdd(Socket socket, @Data("storeType") String storeType,
+			@Data("records") List<Map<String, Object>> records) {
 		List<Object> updatedRecords = new ArrayList<>();
 		List<ImmutableMap<String, ?>> ids = new ArrayList<>();
 

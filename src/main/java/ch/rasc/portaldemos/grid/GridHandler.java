@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.github.flowersinthesand.portal.Bean;
 import com.github.flowersinthesand.portal.Data;
-import com.github.flowersinthesand.portal.Fn;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
@@ -36,8 +35,8 @@ public class GridHandler {
 	public Collection<Book> bookRead(@Data StoreReadRequest readRequest) {
 		Collection<Book> list = BookDb.list();
 		Ordering<Book> ordering = PropertyOrderingFactory.createOrderingFromSorters(readRequest.getSorters());
-		
-		return ordering != null ? ordering.sortedCopy(list) : list;  
+
+		return ordering != null ? ordering.sortedCopy(list) : list;
 	}
 
 	@On

@@ -22,10 +22,10 @@ public class TwitterReader {
 	public final static String LAST_RECEIVED_TWEETS_KEY = "LAST_RECEIVED_TWEETS";
 
 	private long sinceId = 0;
-	
+
 	@Autowired
 	private App app;
-	
+
 	@Scheduled(fixedDelay = 20000)
 	public void readTwitterFeed() throws TwitterException {
 		Room myRoom = app.room("room");

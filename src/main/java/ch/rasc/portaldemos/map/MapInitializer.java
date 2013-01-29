@@ -15,11 +15,10 @@ import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 public class MapInitializer implements ServletContextListener {
 
 	static ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(2);
-	
+
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		new App(new Options().url("/map").packageOf(this), new AtmosphereModule(event.getServletContext()))
-				.register();
+		new App(new Options().url("/map").packageOf(this), new AtmosphereModule(event.getServletContext())).register();
 	}
 
 	@Override

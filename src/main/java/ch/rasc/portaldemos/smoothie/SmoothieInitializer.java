@@ -15,7 +15,7 @@ import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 public class SmoothieInitializer implements ServletContextListener {
 
 	static ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(1);
-	
+
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		new App(new Options().url("/smoothie").packageOf(this), new AtmosphereModule(event.getServletContext()))
