@@ -29,9 +29,7 @@ public class SchedulerHandler {
 	}
 
 	@On
-	public void client_doInitialLoad(Socket socket, @Data Map<String, Object> data) {
-		String storeType = (String) data.get("storeType");
-
+	public void client_doInitialLoad(Socket socket, @Data("storeType") String storeType) {
 		Map<String, Object> result = new HashMap<>();
 		if (storeType.equals("resource")) {
 			result.put("data", ResourceDb.list());
@@ -63,10 +61,7 @@ public class SchedulerHandler {
 
 	// Add record to DB and inform other clients about the change
 	@On
-	public void client_doAdd(Socket socket, @Data Map<String, Object> msg) {
-		String storeType = (String) msg.get("storeType");
-		List<Map<String, Object>> records = (List<Map<String, Object>>) msg.get("records");
-
+	public void client_doAdd(Socket socket, @Data("storeType") String storeType, @Data("records") List<Map<String, Object>> records) {
 		List<Object> updatedRecords = new ArrayList<>();
 		List<ImmutableMap<String, ?>> ids = new ArrayList<>();
 
@@ -80,7 +75,6 @@ public class SchedulerHandler {
 				updatedRecords.add(res);
 
 				ids.add(ImmutableMap.of("internalId", internalId, "id", res.getId()));
-
 			} else {
 				Event event = mapper.convertValue(record, Event.class);
 				EventDb.create(event);
@@ -96,10 +90,7 @@ public class SchedulerHandler {
 
 	// Remove record from DB and inform other clients about the change
 	@On
-	public void client_doRemove(Socket socket, @Data Map<String, Object> msg) {
-		String storeType = (String) msg.get("storeType");
-		List<Integer> ids = (List<Integer>) msg.get("ids");
-
+	public void client_doRemove(Socket socket, @Data("storeType") String storeType, @Data("ids") List<Integer> ids) {
 		if (storeType.equals("resource")) {
 			ResourceDb.delete(ids);
 		} else {
