@@ -32,19 +32,17 @@ public class GridHandler {
 	}
 
 	@On
-	public void bookRead(@Data StoreReadRequest readRequest, @Reply Fn.Callback1<Collection<Book>> reply) {
+	@Reply
+	public Collection<Book> bookRead(@Data StoreReadRequest readRequest) {
 		Collection<Book> list = BookDb.list();
-
 		Ordering<Book> ordering = PropertyOrderingFactory.createOrderingFromSorters(readRequest.getSorters());
-		if (ordering != null) {
-			reply.call(ordering.sortedCopy(list));
-		} else {
-			reply.call(list);
-		}
+		
+		return ordering != null ? ordering.sortedCopy(list) : list;  
 	}
 
 	@On
-	public void bookCreate(Socket socket, @Data Book[] books, @Reply Fn.Callback1<List<Book>> reply) {
+	@Reply
+	public List<Book> bookCreate(Socket socket, @Data Book[] books) {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
 			BookDb.create(book);
@@ -52,11 +50,12 @@ public class GridHandler {
 		}
 
 		room.out(socket).send("bookCreated", result);
-		reply.call(result);
+		return result;
 	}
 
 	@On
-	public void bookUpdate(Socket socket, @Data Book[] books, @Reply Fn.Callback1<List<Book>> reply) {
+	@Reply
+	public List<Book> bookUpdate(Socket socket, @Data Book[] books) {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
 			BookDb.update(book);
@@ -64,14 +63,15 @@ public class GridHandler {
 		}
 
 		room.out(socket).send("bookUpdated", result);
-		reply.call(result);
+		return result;
 	}
 
 	@On
-	public void bookDestroy(Socket socket, @Data Integer[] bookIds, @Reply Fn.Callback1<Boolean> reply) {
+	@Reply
+	public boolean bookDestroy(Socket socket, @Data Integer[] bookIds) {
 		BookDb.delete(Arrays.asList(bookIds));
 		room.out(socket).send("bookDestroyed", bookIds);
-		reply.call(true);
+		return true;
 	}
 
 }

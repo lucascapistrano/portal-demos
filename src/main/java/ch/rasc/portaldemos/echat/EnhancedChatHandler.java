@@ -49,25 +49,22 @@ public class EnhancedChatHandler {
 
 	@On
 	public void close(Socket socket) {
-		disconnect(socket, null);
+		disconnect(socket);
 	}
 
 	@On
-	public void disconnect(Socket socket, @Reply Fn.Callback reply) {
+	@Reply
+	public void disconnect(Socket socket) {
 		UserConnection uc = socketIdToUserMap.remove(socket.param("id"));
 		if (uc != null) {
 			room.send("disconnected", uc);
 			usernameToSocketMap.remove(uc.getUsername());
 		}
-
-		if (reply != null) {
-			reply.call();
-		}
 	}
 
 	@On
-	public void connect(Socket socket, @Data UserConnection newUser, @Reply Fn.Callback reply) {
-
+	@Reply
+	public void connect(Socket socket, @Data UserConnection newUser) {
 		UserAgent ua = parser.parse(newUser.getBrowser());
 		if (ua != null) {
 			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().getMajor());
@@ -79,7 +76,6 @@ public class EnhancedChatHandler {
 		usernameToSocketMap.put(newUser.getUsername(), socket);
 
 		room.send("connected", newUser);
-		reply.call();
 	}
 
 	@On
