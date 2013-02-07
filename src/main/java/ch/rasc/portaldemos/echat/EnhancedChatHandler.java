@@ -54,7 +54,7 @@ public class EnhancedChatHandler {
 	@On
 	@Reply
 	public void disconnect(Socket socket) {
-		UserConnection uc = socketIdToUserMap.remove(socket.param("id"));
+		UserConnection uc = socketIdToUserMap.remove(socket.id());
 		if (uc != null) {
 			room.send("disconnected", uc);
 			usernameToSocketMap.remove(uc.getUsername());
@@ -71,7 +71,7 @@ public class EnhancedChatHandler {
 				newUser.setSupportsWebRTC(true);
 			}
 		}
-		socketIdToUserMap.put(socket.param("id"), newUser);
+		socketIdToUserMap.put(socket.id(), newUser);
 		usernameToSocketMap.put(newUser.getUsername(), socket);
 
 		room.send("connected", newUser);
@@ -124,7 +124,7 @@ public class EnhancedChatHandler {
 
 	@On
 	public void snapshot(Socket socket, @Data String image) {
-		UserConnection uc = socketIdToUserMap.get(socket.param("id"));
+		UserConnection uc = socketIdToUserMap.get(socket.id());
 		if (uc != null && image.startsWith(DATA_IMAGE)) {
 			try {
 				byte[] imageBytes = DatatypeConverter.parseBase64Binary(image.substring(DATA_IMAGE.length()));

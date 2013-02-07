@@ -75,7 +75,7 @@ public class SnakeHandler {
 
 	@On
 	public void open(Socket socket) {
-		String id = socket.param("id");
+		String id = socket.id();
 		Snake snake = new Snake(id, socket);
 		snakes.put(id, snake);
 
@@ -91,27 +91,27 @@ public class SnakeHandler {
 
 	@On
 	public void north(Socket socket) {
-		snakes.get(socket.param("id")).setDirection(Direction.NORTH);
+		snakes.get(socket.id()).setDirection(Direction.NORTH);
 	}
 
 	@On
 	public void west(Socket socket) {
-		snakes.get(socket.param("id")).setDirection(Direction.WEST);
+		snakes.get(socket.id()).setDirection(Direction.WEST);
 	}
 
 	@On
 	public void east(Socket socket) {
-		snakes.get(socket.param("id")).setDirection(Direction.EAST);
+		snakes.get(socket.id()).setDirection(Direction.EAST);
 	}
 
 	@On
 	public void south(Socket socket) {
-		snakes.get(socket.param("id")).setDirection(Direction.SOUTH);
+		snakes.get(socket.id()).setDirection(Direction.SOUTH);
 	}
 
 	@On
 	public void close(Socket socket) {
-		Snake removedSnake = snakes.remove(socket.param("id"));
+		Snake removedSnake = snakes.remove(socket.id());
 		room.remove(socket);
 		room.send("leave", ImmutableMap.of("id", removedSnake.getId()));
 	}

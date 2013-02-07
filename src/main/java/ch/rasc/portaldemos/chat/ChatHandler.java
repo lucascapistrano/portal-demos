@@ -14,11 +14,6 @@ public class ChatHandler {
 	Room room;
 
 	@On
-	public void close(Socket socket) {
-		System.out.println("closing: " + socket);
-	}
-
-	@On
 	public void open(Socket socket) {
 		room.add(socket);
 	}
