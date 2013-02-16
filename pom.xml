@@ -168,6 +168,23 @@
 			</plugin>
 
 			<plugin>
+				<groupId>ch.rasc</groupId>
+				<artifactId>embeddedtc-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>package-tcwar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<finalName>portaldemos.jar</finalName>
+					<includeJSPSupport>false</includeJSPSupport>
+				</configuration>
+			</plugin>	
+
+			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.0</version>
