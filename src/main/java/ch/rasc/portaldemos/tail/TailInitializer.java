@@ -55,7 +55,12 @@ public class TailInitializer implements ServletContextListener {
 				.register();
 
 		try {
-			lookupService = new LookupService(System.getProperty("TAIL_GEOCITY_DAT"), LookupService.GEOIP_INDEX_CACHE);
+			String property = System.getProperty("TAIL_GEOCITY_DAT");
+			if (property == null) {
+				System.out.println("TAIL_GEOCITY_DAT system property not set");
+				return;
+			}
+			lookupService = new LookupService(property, LookupService.GEOIP_INDEX_CACHE);
 			tailers = Lists.newArrayList();
 
 			String logFiles = System.getProperty("TAIL_ACCESS_LOG");
