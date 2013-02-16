@@ -156,33 +156,7 @@
 
 	<build>
 		<plugins>
-		
-			<plugin>
-				<groupId>ch.rasc</groupId>
-				<artifactId>embeddedtc-maven-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>package-tcwar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<finalName>test.jar</finalName>
-					<includeJSPSupport>false</includeJSPSupport>
-			        <extraResources>
-						<resource>
-						     <directory>D:\misc\0717-182</directory>						     
-						</resource>
-			        </extraResources>
-			        <extraWars>
-			          
-			        </extraWars>
-				</configuration>
-			</plugin>		
-		
-		
+				
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
