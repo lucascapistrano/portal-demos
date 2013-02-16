@@ -28,9 +28,9 @@ public class TwitterReader {
 
 	@Scheduled(fixedDelay = 20000)
 	public void readTwitterFeed() throws TwitterException {
-		Room myRoom = app.room("room");
+		Room hall = app.hall();
 
-		if (myRoom.size() > 0) {
+		if (hall.size() > 0) {
 			Twitter twitter = TwitterFactory.getSingleton();
 			Query query = new Query("java");
 			query.setCount(20);
@@ -52,8 +52,7 @@ public class TwitterReader {
 			}
 
 			if (!tweets.isEmpty()) {
-				myRoom.send("newTweets", tweets);
-				myRoom.set(LAST_RECEIVED_TWEETS_KEY, tweets);
+				hall.send("newTweets", tweets).set(LAST_RECEIVED_TWEETS_KEY, tweets);
 			}
 		}
 	}

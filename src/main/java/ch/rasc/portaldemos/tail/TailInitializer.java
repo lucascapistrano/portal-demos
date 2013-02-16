@@ -24,7 +24,6 @@ import org.joda.time.DateTime;
 
 import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
-import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -90,8 +89,6 @@ public class TailInitializer implements ServletContextListener {
 	private class ListenerAdapter extends TailerListenerAdapter {
 		@Override
 		public void handle(String line) {
-			Room myRoom = app.room("room");
-
 			Matcher matcher = accessLogPattern.matcher(line);
 			if (!matcher.matches()) {
 				matcher = vhostAccessLogPattern.matcher(line);
@@ -127,7 +124,7 @@ public class TailInitializer implements ServletContextListener {
 					}
 					access.setLl(new float[] { l.latitude, l.longitude });
 
-					myRoom.send("geoip", access);
+					app.hall().send("geoip", access);
 				}
 			}
 		}

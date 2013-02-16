@@ -10,6 +10,7 @@ import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
+import com.github.flowersinthesand.portal.Throw;
 import com.github.flowersinthesand.portal.Wire;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -18,16 +19,12 @@ import com.google.common.collect.Ordering;
 public class GridHandler {
 
 	@Wire
-	Room room;
-
-	@On
-	public void open(Socket socket) {
-		room.add(socket);
-	}
+	Room hall;
 
 	@On
 	@Reply
-	public Collection<Book> bookRead(@Data StoreReadRequest readRequest) {
+	@Throw
+	public Collection<Book> bookRead(@Data StoreReadRequest readRequest) throws Throwable {
 		Collection<Book> list = BookDb.list();
 		Ordering<Book> ordering = PropertyOrderingFactory.createOrderingFromSorters(readRequest.getSorters());
 
@@ -36,35 +33,38 @@ public class GridHandler {
 
 	@On
 	@Reply
-	public List<Book> bookCreate(Socket socket, @Data Book[] books) {
+	@Throw
+	public List<Book> bookCreate(Socket socket, @Data Book[] books) throws Throwable {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
 			BookDb.create(book);
 			result.add(book);
 		}
 
-		room.out(socket).send("bookCreated", result);
+		hall.out(socket).send("bookCreated", result);
 		return result;
 	}
 
 	@On
 	@Reply
-	public List<Book> bookUpdate(Socket socket, @Data Book[] books) {
+	@Throw
+	public List<Book> bookUpdate(Socket socket, @Data Book[] books) throws Throwable {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
 			BookDb.update(book);
 			result.add(book);
 		}
 
-		room.out(socket).send("bookUpdated", result);
+		hall.out(socket).send("bookUpdated", result);
 		return result;
 	}
 
 	@On
 	@Reply
-	public boolean bookDestroy(Socket socket, @Data Integer[] bookIds) {
+	@Throw
+	public boolean bookDestroy(Socket socket, @Data Integer[] bookIds) throws Throwable {
 		BookDb.delete(Arrays.asList(bookIds));
-		room.out(socket).send("bookDestroyed", bookIds);
+		hall.out(socket).send("bookDestroyed", bookIds);
 		return true;
 	}
 

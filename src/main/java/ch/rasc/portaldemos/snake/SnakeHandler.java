@@ -71,7 +71,7 @@ public class SnakeHandler {
 	}
 
 	@Wire
-	Room room;
+	Room hall;
 
 	@On
 	public void open(Socket socket) {
@@ -85,8 +85,7 @@ public class SnakeHandler {
 			snakesObjects.add(ImmutableMap.of("id", s.getId(), "color", s.getHexColor()));
 		}
 
-		room.add(socket);
-		room.send("join", snakesObjects);
+		hall.send("join", snakesObjects);
 	}
 
 	@On
@@ -112,8 +111,7 @@ public class SnakeHandler {
 	@On
 	public void close(Socket socket) {
 		Snake removedSnake = snakes.remove(socket.id());
-		room.remove(socket);
-		room.send("leave", ImmutableMap.of("id", removedSnake.getId()));
+		hall.remove(socket).send("leave", ImmutableMap.of("id", removedSnake.getId()));
 	}
 
 	private void tick() {
@@ -123,7 +121,7 @@ public class SnakeHandler {
 			snake.update(getSnakes());
 			snakeLocations.add(snake.getLocationObjects());
 		}
-		room.send("update", snakeLocations);
+		hall.send("update", snakeLocations);
 	}
 
 	private Collection<Snake> getSnakes() {

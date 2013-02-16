@@ -14,18 +14,13 @@ import com.google.common.collect.ImmutableList;
 public class MapHandler {
 
 	@Wire
-	Room room;
+	Room hall;
 
 	@Prepare
 	public void prepare() {
 		MapInitializer.threadPool.scheduleWithFixedDelay(new Car("driveBlue", Route.routeBlue), 1, 1, TimeUnit.SECONDS);
 		MapInitializer.threadPool.scheduleWithFixedDelay(new Car("driveRed", Route.routeRed), 2000, 1200,
 				TimeUnit.MILLISECONDS);
-	}
-
-	@On
-	public void open(Socket socket) {
-		room.add(socket);
 	}
 
 	private class Car implements Runnable {
@@ -43,8 +38,8 @@ public class MapHandler {
 
 		@Override
 		public void run() {
-			if (room.size() > 0) {
-				room.send(event, route.get(index));
+			if (hall.size() > 0) {
+				hall.send(event, route.get(index));
 				index++;
 				if (index >= route.size()) {
 					index = 0;

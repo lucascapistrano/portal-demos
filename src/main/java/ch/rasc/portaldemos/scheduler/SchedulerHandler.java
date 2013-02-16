@@ -21,12 +21,7 @@ public class SchedulerHandler {
 	private final static ObjectMapper mapper = new ObjectMapper();
 
 	@Wire
-	Room room;
-
-	@On
-	public void open(Socket socket) {
-		room.add(socket);
-	}
+	Room hall;
 
 	@On
 	public void client_doInitialLoad(Socket socket, @Data("storeType") String storeType) {
@@ -56,7 +51,7 @@ public class SchedulerHandler {
 			}
 		}
 
-		room.out(socket).send("server_doUpdate", msg);
+		hall.out(socket).send("server_doUpdate", msg);
 	}
 
 	// Add record to DB and inform other clients about the change
@@ -85,7 +80,7 @@ public class SchedulerHandler {
 			}
 		}
 
-		room.out(socket).send("server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
+		hall.out(socket).send("server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
 		socket.send("server_syncId", ImmutableMap.of("ids", ids, "storeType", storeType));
 	}
 
@@ -98,7 +93,7 @@ public class SchedulerHandler {
 			EventDb.delete(ids);
 		}
 
-		room.out(socket).send("server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
+		hall.out(socket).send("server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
 	}
 
 }

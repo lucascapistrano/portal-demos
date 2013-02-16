@@ -32,7 +32,7 @@ Ext.define('Ext.data.proxy.PortalProxy', {
 			}
 		}, function(err) {
 			console.log(err);
-			operation.setException(err.desc);
+			operation.setException(err.message);
 			me.fireEvent('exception', me, err, operation);
 
 			if (typeof callback === 'function') {
@@ -68,7 +68,7 @@ Ext.define('Ext.data.proxy.PortalProxy', {
 			}
 		}, function(err) {
 			console.log(err);
-			operation.setException(err.desc);
+			operation.setException(err.message);
 			me.fireEvent('exception', me, err, operation);
 
 			if (typeof callback === 'function') {
@@ -97,7 +97,7 @@ Ext.define('Ext.data.proxy.PortalProxy', {
 			}
 		}, function(err) {
 			console.log(err);
-			operation.setException(err.desc);
+			operation.setException(err.message);
 			me.fireEvent('exception', me, err, operation);
 
 			if (typeof callback === 'function') {
@@ -169,7 +169,7 @@ Ext.define('Ext.data.proxy.PortalProxy', {
 				callback.call(scope || me, operation);
 			}
 		}, function(err) {
-			operation.setException(err.desc);
+			operation.setException(err.message);
 			me.fireEvent('exception', me, err, operation);
 
 			if (typeof callback === 'function') {

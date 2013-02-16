@@ -11,16 +11,11 @@ import com.github.flowersinthesand.portal.Wire;
 public class ChatHandler {
 
 	@Wire
-	Room room;
-
-	@On
-	public void open(Socket socket) {
-		room.add(socket);
-	}
+	private Room hall;
 
 	@On
 	public void message(@Data ChatMessage message) {
-		room.send("message", message);
+		hall.send("message", message);
 	}
 
 }
