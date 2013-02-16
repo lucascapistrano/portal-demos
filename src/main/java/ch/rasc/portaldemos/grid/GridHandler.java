@@ -18,12 +18,7 @@ import com.google.common.collect.Ordering;
 public class GridHandler {
 
 	@Wire
-	Room room;
-
-	@On
-	public void open(Socket socket) {
-		room.add(socket);
-	}
+	Room hall;
 
 	@On
 	@Reply
@@ -43,7 +38,7 @@ public class GridHandler {
 			result.add(book);
 		}
 
-		room.out(socket).send("bookCreated", result);
+		hall.out(socket).send("bookCreated", result);
 		return result;
 	}
 
@@ -56,7 +51,7 @@ public class GridHandler {
 			result.add(book);
 		}
 
-		room.out(socket).send("bookUpdated", result);
+		hall.out(socket).send("bookUpdated", result);
 		return result;
 	}
 
@@ -64,7 +59,7 @@ public class GridHandler {
 	@Reply
 	public boolean bookDestroy(Socket socket, @Data Integer[] bookIds) {
 		BookDb.delete(Arrays.asList(bookIds));
-		room.out(socket).send("bookDestroyed", bookIds);
+		hall.out(socket).send("bookDestroyed", bookIds);
 		return true;
 	}
 

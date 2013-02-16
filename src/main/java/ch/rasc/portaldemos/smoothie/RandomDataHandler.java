@@ -14,16 +14,11 @@ import com.github.flowersinthesand.portal.Wire;
 public class RandomDataHandler {
 
 	@Wire
-	Room room;
+	Room hall;
 
 	@Prepare
 	public void prepare() {
 		SmoothieInitializer.threadPool.scheduleWithFixedDelay(new RandomDataGenerator(), 1, 1, TimeUnit.SECONDS);
-	}
-
-	@On
-	public void open(Socket socket) {
-		room.add(socket);
 	}
 
 	private class RandomDataGenerator implements Runnable {
@@ -31,7 +26,7 @@ public class RandomDataHandler {
 
 		@Override
 		public void run() {
-			if (room.size() > 0) {
+			if (hall.size() > 0) {
 				CpuData cpuData = new CpuData();
 				cpuData.setHost1(new double[] { random.nextDouble(), random.nextDouble(), random.nextDouble(),
 						random.nextDouble() });
@@ -41,7 +36,7 @@ public class RandomDataHandler {
 						random.nextDouble() });
 				cpuData.setHost4(new double[] { random.nextDouble(), random.nextDouble(), random.nextDouble(),
 						random.nextDouble() });
-				room.send("cpu", cpuData);
+				hall.send("cpu", cpuData);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public class EnhancedChatHandler {
 	private final Map<String, Socket> usernameToSocketMap = Maps.newConcurrentMap();
 
 	@Wire
-	Room room;
+	Room hall;
 
 	@On
 	public void close(Socket socket) {
@@ -56,7 +56,7 @@ public class EnhancedChatHandler {
 	public void disconnect(Socket socket) {
 		UserConnection uc = socketIdToUserMap.remove(socket.id());
 		if (uc != null) {
-			room.send("disconnected", uc);
+			hall.send("disconnected", uc);
 			usernameToSocketMap.remove(uc.getUsername());
 		}
 	}
@@ -74,18 +74,17 @@ public class EnhancedChatHandler {
 		socketIdToUserMap.put(socket.id(), newUser);
 		usernameToSocketMap.put(newUser.getUsername(), socket);
 
-		room.send("connected", newUser);
+		hall.send("connected", newUser);
 	}
 
 	@On
 	public void open(Socket socket) {
-		room.add(socket);
 		socket.send("connectedUsers", socketIdToUserMap.values());
 	}
 
 	@On
 	public void message(@Data ChatMessage message) {
-		room.send("message", message);
+		hall.send("message", message);
 	}
 
 	@On
@@ -130,7 +129,7 @@ public class EnhancedChatHandler {
 				byte[] imageBytes = DatatypeConverter.parseBase64Binary(image.substring(DATA_IMAGE.length()));
 				String resizedImageDataURL = resize(imageBytes);
 				uc.setImage(resizedImageDataURL);
-				room.send("snapshot", uc);
+				hall.send("snapshot", uc);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
