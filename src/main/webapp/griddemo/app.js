@@ -43,7 +43,8 @@ Ext.onReady(function() {
 	var store = Ext.create('Ext.data.PortalStore', {
 		model: 'Book',
 		autoLoad: true,
-		remoteSort: true
+		remoteSort: true,
+		autoSync: true
 	});
 
 	var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
@@ -99,7 +100,13 @@ Ext.onReady(function() {
 
 				store.insert(0, r);
 				rowEditing.startEdit(0, 0);
-			}
+			},
+			listeners: {
+		        render: function() {
+		            this.addCls("x-btn-default-small");
+		            this.removeCls("x-btn-default-toolbar-small");
+		        }
+		    }
 		}, {
 			itemId: 'removeBook',
 			text: 'Remove Book',
@@ -111,14 +118,48 @@ Ext.onReady(function() {
 					sm.select(0);
 				}
 			},
-			disabled: true
+			disabled: true,
+			listeners: {
+		        render: function() {
+		            this.addCls("x-btn-default-small");
+		            this.removeCls("x-btn-default-toolbar-small");
+		        }
+		    }
 		}, '->', {
+			xtype: 'checkbox',
+			fieldLabel: 'Autosync',
+			labelWidth: 60,
+			width: 90,
+			checked: true,
+			inputValue: true,			
+			handler: function(e) {
+				store.autoSync = e.checked;
+				grid.down('#syncButton').setDisabled(e.checked);
+				grid.down('#rollbackButton').setDisabled(e.checked);
+			}
+		}, '-', {
 			text: 'Rollback',
+			itemId: 'rollbackButton',
+			disabled: true,
+			listeners: {
+		        render: function() {
+		            this.addCls("x-btn-default-small");
+		            this.removeCls("x-btn-default-toolbar-small");
+		        }
+		    },
 			handler: function() {
 				store.rejectChanges();
 			}
-		}, '-', {
+		}, {
 			text: 'Sync',
+			itemId: 'syncButton',
+			disabled: true,
+			listeners: {
+		        render: function() {
+		            this.addCls("x-btn-default-small");
+		            this.removeCls("x-btn-default-toolbar-small");
+		        }
+		    },
 			handler: function() {
 				store.sync();
 			}
