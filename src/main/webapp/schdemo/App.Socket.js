@@ -73,8 +73,8 @@ Ext.define('App.Socket', {
 			store.insert(store.getCount(), new store.model(records[i]));
 		}
 		
-		store.resumeEvents();		
-		this.owner.getView().refreshKeepingScroll();
+		store.resumeEvents();	
+		this.owner.getView().refresh();
 	},
 
 	/**
@@ -135,15 +135,14 @@ Ext.define('App.Socket', {
 				record.set(current);
 			}
 		}
-
-		this.owner.getView().refreshKeepingScroll();
+		this.owner.getView().refresh();
 		store.resumeEvents();
 	},
 
 	/**
 	 * On adding removing records from client store, send event to server and remove items from DB.
 	 */
-	doRemove: function(store, records, index, opts) {
+	doRemove: function(store, records, index, flag, opts) {
 		var ids = [];
 
 		if (records.length) {
