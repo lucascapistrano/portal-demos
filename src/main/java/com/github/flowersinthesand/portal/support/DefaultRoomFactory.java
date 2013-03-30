@@ -30,7 +30,7 @@ import com.github.flowersinthesand.portal.spi.RoomFactory;
 @Bean("roomFactory")
 public class DefaultRoomFactory implements RoomFactory {
 
-	private Map<String, Room> rooms = new ConcurrentHashMap<String, Room>();
+	private final Map<String, Room> rooms = new ConcurrentHashMap<String, Room>();
 
 	@Override
 	public Set<Room> all() {
@@ -61,9 +61,11 @@ public class DefaultRoomFactory implements RoomFactory {
 
 	static class DefaultRoom implements Room {
 
-		private String name;
-		private Set<Socket> sockets = new CopyOnWriteArraySet<Socket>();
-		private Map<String, Object> attrs = new ConcurrentHashMap<String, Object>();
+		private final String name;
+
+		private final Set<Socket> sockets = new CopyOnWriteArraySet<Socket>();
+
+		private final Map<String, Object> attrs = new ConcurrentHashMap<String, Object>();
 
 		public DefaultRoom(String name) {
 			this.name = name;
