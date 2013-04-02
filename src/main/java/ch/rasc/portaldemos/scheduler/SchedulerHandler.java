@@ -1,7 +1,6 @@
 package ch.rasc.portaldemos.scheduler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,76 +23,41 @@ public class SchedulerHandler {
 	Room hall;
 
 	@On
-	public void client_doInitialLoad(Socket socket, @Data("storeType") String storeType) {
-		Map<String, Object> result = new HashMap<>();
-		if (storeType.equals("resource")) {
-			result.put("data", ResourceDb.list());
-		} else {
-			result.put("data", EventDb.list());
-		}
-		result.put("storeType", storeType);
-		socket.send("server_doInitialLoad", result);
+	public void client_doInitialLoad(Socket socket) {
+		socket.send("server_doInitialLoad", ImmutableMap.of("data", CustomEventDb.list()));
 	}
 
-	// Update records in DB and inform other clients about the change
 	@On
-	public void client_doUpdate(Socket socket, @Data Map<String, Object> msg) {
-		String storeType = (String) msg.get("storeType");
-		List<Map<String, Object>> records = (List<Map<String, Object>>) msg.get("records");
-
-		for (Map<String, Object> record : records) {
-			if (storeType.equals("resource")) {
-				Resource res = mapper.convertValue(record, Resource.class);
-				ResourceDb.update(res);
-			} else {
-				Event event = mapper.convertValue(record, Event.class);
-				EventDb.update(event);
-			}
-		}
-
-		hall.out(socket).send("server_doUpdate", msg);
+	public void client_doUpdate(Socket socket, @Data CustomEvent record) {
+		CustomEventDb.update(record);
+		hall.out(socket).send("server_doUpdate", record);
 	}
 
-	// Add record to DB and inform other clients about the change
 	@On
-	public void client_doAdd(Socket socket, @Data("storeType") String storeType,
-			@Data("records") List<Map<String, Object>> records) {
+	public void client_doAdd(Socket socket, @Data List<Map<String, Object>> records) {
 		List<Object> updatedRecords = new ArrayList<>();
 		List<ImmutableMap<String, ?>> ids = new ArrayList<>();
 
 		for (Map<String, Object> r : records) {
-			Map<String, Object> record = (Map<String, Object>) r.get("record");
+			Map<String, Object> record = (Map<String, Object>) r.get("data");
 			String internalId = (String) r.get("internalId");
 
-			if (storeType.equals("resource")) {
-				Resource res = mapper.convertValue(record, Resource.class);
-				ResourceDb.create(res);
-				updatedRecords.add(res);
+			CustomEvent event = mapper.convertValue(record, CustomEvent.class);
+			CustomEventDb.create(event);
+			updatedRecords.add(event);
 
-				ids.add(ImmutableMap.of("internalId", internalId, "id", res.getId()));
-			} else {
-				Event event = mapper.convertValue(record, Event.class);
-				EventDb.create(event);
-				updatedRecords.add(event);
-
-				ids.add(ImmutableMap.of("internalId", internalId, "id", event.getId()));
-			}
+			ids.add(ImmutableMap.of("internalId", internalId, "record", event));
 		}
 
-		hall.out(socket).send("server_doAdd", ImmutableMap.of("records", updatedRecords, "storeType", storeType));
-		socket.send("server_syncId", ImmutableMap.of("ids", ids, "storeType", storeType));
+		hall.out(socket).send("server_doAdd", ImmutableMap.of("records", updatedRecords));
+		socket.send("server_syncId", ImmutableMap.of("records", ids));
 	}
 
-	// Remove record from DB and inform other clients about the change
 	@On
-	public void client_doRemove(Socket socket, @Data("storeType") String storeType, @Data("ids") List<Integer> ids) {
-		if (storeType.equals("resource")) {
-			ResourceDb.delete(ids);
-		} else {
-			EventDb.delete(ids);
-		}
+	public void client_doRemove(Socket socket, @Data("ids") List<Integer> ids) {
+		CustomEventDb.delete(ids);
 
-		hall.out(socket).send("server_doRemove", ImmutableMap.of("ids", ids, "storeType", storeType));
+		hall.out(socket).send("server_doRemove", ImmutableMap.of("ids", ids));
 	}
 
 }
