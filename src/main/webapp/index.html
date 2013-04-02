@@ -117,18 +117,6 @@
 					</li>					
 				</ul>
 			</section>
-
-			<section id="environments">
-				<h3>Environments</h3>
-				<ul> 
-					<li><a href="http://portal-demos.rasc.ch/ajp/index.html">Apache <i class="icon-exchange"></i> AJP Tomcat</a></li>
-					<li><a href="http://portal-demos.rasc.ch/bio/index.html">Apache <i class="icon-exchange"></i> HTTP BIO Tomcat</a></li>
-					<li><a href="http://portal-demos.rasc.ch/nio/index.html">Apache <i class="icon-exchange"></i> HTTP NIO Tomcat</a></li>
-					<li><a href="http://ha-bio.rasc.ch/portal-demos/index.html">HAProxy <i class="icon-exchange"></i> HTTP BIO Tomcat</a></li>
-					<li><a href="http://ha-nio.rasc.ch/portal-demos/index.html">HAProxy <i class="icon-exchange"></i> HTTP NIO Tomcat</a></li>
-				</ul>
-				<p>Websocket currently only works with HAProxy and the BIO Connector.</p>
-			</section>
 			
 			<section id="links">
 			  <h3>Links</h3>
@@ -137,32 +125,11 @@
 			    <li><a href="https://github.com/flowersinthesand/portal-java">portal-java</a></li>
 			    <li><a href="https://github.com/flowersinthesand/portal">portal js</a></li>
 			    <li><a href="https://github.com/Atmosphere/atmosphere">atmosphere</a></li>
+			    <li><a href="http://www.bryntum.com/">Bryntum</a></li>
 			  </ul>
 			</section>
 		</div>
 	</div>
-
-  <script>
-    var activeLink = document.querySelector('a[href^="'+window.location.href+'"]');
-    if (activeLink) {
-    	activeLink.className = 'highlight';
-    }
-    
-    var wsEnabledUrl = ['http://ha-bio.rasc.ch/portal-demos/', 'http://localhost:8080/'];
-    var wsEnabled = false;
-    for (var j = 0; j < wsEnabledUrl.length; j++) {
-    	if (window.location.href.indexOf(wsEnabledUrl[j]) >= 0) {
-    		wsEnabled = true;
-    		break;
-    	}
-    }
-    if (!wsEnabled) {
-	    var demoLinks = document.querySelectorAll('.demolink');
-	    for (var i = 0; i < demoLinks.length; i++) {
-	    	demoLinks[i].href = demoLinks[i].href + '?nows';
-	    }
-    }
-  </script>
 
 </body>
 </html>
