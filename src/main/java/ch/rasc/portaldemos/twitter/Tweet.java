@@ -1,6 +1,6 @@
 package ch.rasc.portaldemos.twitter;
 
-public class Tweet {
+public class Tweet implements Comparable<Tweet> {
 	private long id;
 
 	private String profileImageUrl;
@@ -49,6 +49,11 @@ public class Tweet {
 
 	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	@Override
+	public int compareTo(Tweet o) {
+		return (int) (o.createdAt - createdAt);
 	}
 
 }

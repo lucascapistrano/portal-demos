@@ -27,8 +27,10 @@ public class SpringConfig {
 
 	@Bean
 	public App app() {
-		return new App(new Options().url("/twitter").packageOf(this), new AtmosphereModule(servletContext),
+		App app = new App(new Options().url("/twitter").packageOf(this), new AtmosphereModule(servletContext),
 				new SpringModule(beanFactory));
+		app.bean(TwitterHandler.class).init();
+		return app;
 	}
 
 }

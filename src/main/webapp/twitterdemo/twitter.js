@@ -15,6 +15,7 @@ Ext.onReady(function(){
 	    layout : 'fit',
 	    title : 'Twitter Example: Protocol',
 	    renderTo: Ext.getBody(),
+	    bodyStyle: 'background-color: #DAE6C4;',
 	    
 	    items : new Ext.view.View({
 	        store : store,
@@ -25,8 +26,8 @@ Ext.onReady(function(){
 						'<li class="{[values.isNew ? "tweet isnew" : "tweet"]}">',   
 							'<img class="profile-image" src="{profileImageUrl}" />',
 							'<h2>{fromUser}</h2>',
-							'<p>{text}  ',
-							'<span class="createdAt">(Created at: {createdAt:date("Y-m-d H:i:s")})</span>',
+							'<p>{text}<br>',
+							'<span class="createdAt">Created at: {createdAt:date("Y-m-d H:i:s")}</span>',
 							'</p>',					
 						'</li>',
 					'</tpl>',
