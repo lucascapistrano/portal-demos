@@ -47,7 +47,8 @@ public class TwitterStatusListener implements StatusStreamHandler {
 		while (matcher.find()) {
 			String unshortenedURL = unshorten(matcher.group());
 			if (unshortenedURL != null) {
-				matcher.appendReplacement(sb, "<a target=\"_blank\" href=\"" + unshortenedURL + "\">" + unshortenedURL + "</a>");
+				matcher.appendReplacement(sb, "<a target=\"_blank\" href=\"" + unshortenedURL + "\">" + unshortenedURL
+						+ "</a>");
 			} else {
 				matcher.appendReplacement(sb, "$0");
 			}
