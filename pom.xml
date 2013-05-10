@@ -86,7 +86,7 @@
 		<dependency>
 			<groupId>net.sf.uadetector</groupId>
 			<artifactId>uadetector-resources</artifactId>
-			<version>2013.03</version>
+			<version>2013.04</version>
 		</dependency>
 
 		<dependency>
@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.11</version>
+			<version>1.0.12</version>
 		</dependency>
 
 		<dependency>
@@ -122,13 +122,13 @@
 		<dependency>
 			<groupId>com.twitter</groupId>
 			<artifactId>hbc-twitter4j</artifactId>
-			<version>1.3.3</version>
+			<version>1.4.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>ch.rasc</groupId>
 			<artifactId>embeddedtc</artifactId>
-			<version>1.6</version>
+			<version>1.7</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -164,7 +164,7 @@
 			<plugin>
 				<groupId>ch.rasc</groupId>
 				<artifactId>embeddedtc-maven-plugin</artifactId>
-				<version>1.3</version>
+				<version>1.4</version>
 				<executions>
 					<execution>
 						<goals>
