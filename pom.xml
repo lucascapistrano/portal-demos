@@ -86,7 +86,7 @@
 		<dependency>
 			<groupId>net.sf.uadetector</groupId>
 			<artifactId>uadetector-resources</artifactId>
-			<version>2013.04</version>
+			<version>2013.05</version>
 		</dependency>
 
 		<dependency>
@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.12</version>
+			<version>1.0.13</version>
 		</dependency>
 
 		<dependency>
@@ -128,7 +128,7 @@
 		<dependency>
 			<groupId>ch.rasc</groupId>
 			<artifactId>embeddedtc</artifactId>
-			<version>1.7</version>
+			<version>1.8</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -164,7 +164,7 @@
 			<plugin>
 				<groupId>ch.rasc</groupId>
 				<artifactId>embeddedtc-maven-plugin</artifactId>
-				<version>1.4</version>
+				<version>1.5</version>
 				<executions>
 					<execution>
 						<goals>

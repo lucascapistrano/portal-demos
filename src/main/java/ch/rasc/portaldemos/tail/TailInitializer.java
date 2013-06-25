@@ -13,7 +13,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import net.sf.uadetector.UserAgent;
+import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.UserAgentFamily;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
@@ -115,7 +115,7 @@ public class TailInitializer implements ServletContextListener {
 					access.setCountry(l.countryName);
 
 					String userAgent = matcher.group(9);
-					UserAgent ua = parser.parse(userAgent);
+					ReadableUserAgent ua = parser.parse(userAgent);
 					if (ua != null && ua.getFamily() != UserAgentFamily.UNKNOWN) {
 						String uaString = ua.getName() + " " + ua.getVersionNumber().toVersionString();
 						uaString += "; " + ua.getOperatingSystem().getName();

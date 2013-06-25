@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 
-import net.sf.uadetector.UserAgent;
+import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.UserAgentFamily;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
@@ -64,7 +64,7 @@ public class EnhancedChatHandler {
 	@On
 	@Reply
 	public void connect(Socket socket, @Data UserConnection newUser) {
-		UserAgent ua = parser.parse(newUser.getBrowser());
+		ReadableUserAgent ua = parser.parse(newUser.getBrowser());
 		if (ua != null) {
 			newUser.setBrowser(ua.getName() + " " + ua.getVersionNumber().getMajor());
 			if (ua.getFamily() == UserAgentFamily.CHROME) {
