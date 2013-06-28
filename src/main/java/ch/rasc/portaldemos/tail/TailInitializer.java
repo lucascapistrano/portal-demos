@@ -33,11 +33,9 @@ import com.maxmind.geoip.LookupService;
 @WebListener
 public class TailInitializer implements ServletContextListener {
 
-	private final Pattern accessLogPattern = Pattern.compile(getAccessLogRegex(false), Pattern.CASE_INSENSITIVE
+	private final Pattern accessLogPattern = Pattern.compile(getAccessLogRegex(), Pattern.CASE_INSENSITIVE
 			| Pattern.DOTALL);
 
-	private final Pattern vhostAccessLogPattern = Pattern.compile(getAccessLogRegex(true), Pattern.CASE_INSENSITIVE
-			| Pattern.DOTALL);
 
 	private final UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
 
@@ -95,12 +93,9 @@ public class TailInitializer implements ServletContextListener {
 		@Override
 		public void handle(String line) {
 			Matcher matcher = accessLogPattern.matcher(line);
-			if (!matcher.matches()) {
-				matcher = vhostAccessLogPattern.matcher(line);
-			}
 
 			if (!matcher.matches()) {
-				// System.out.println(line);
+				//System.out.println(line);
 				return;
 			}
 
@@ -135,18 +130,8 @@ public class TailInitializer implements ServletContextListener {
 		}
 	}
 
-	private static String getAccessLogRegex(boolean vhostLog) {
-
-		String regexv = "";
-		String regex1;
-		if (vhostLog) {
-			regexv = "^\\S+ ";
-			regex1 = "";
-		} else {
-			regex1 = "^";
-		}
-
-		regex1 += "([\\d.-]+)"; // Client IP
+	private static String getAccessLogRegex() {
+		String regex1 = "^([\\d.-]+)"; // Client IP
 		String regex2 = " (\\S+)"; // -
 		String regex3 = " (\\S+)"; // -
 		String regex4 = " \\[([\\w:/]+\\s[+\\-]\\d{4})\\]"; // Date
@@ -156,7 +141,7 @@ public class TailInitializer implements ServletContextListener {
 		String regex8 = " \"([^\"]+|.+?)\""; // Referer
 		String regex9 = " \"([^\"]+|.+?)\""; // Agent
 
-		return regexv + regex1 + regex2 + regex3 + regex4 + regex5 + regex6 + regex7 + regex8 + regex9;
+		return regex1 + regex2 + regex3 + regex4 + regex5 + regex6 + regex7 + regex8 + regex9;
 	}
 
 }
