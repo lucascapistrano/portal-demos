@@ -1,3 +1,3 @@
 Demo applications with [portal.js](https://github.com/flowersinthesand/portal) / [portal-java](https://github.com/flowersinthesand/portal-java) / [atmosphere](https://github.com/Atmosphere/atmosphere)
 
-##Online: http://ha-bio.rasc.ch/portal-demos/
+##Online: http://demo.rasc.ch/portal/
