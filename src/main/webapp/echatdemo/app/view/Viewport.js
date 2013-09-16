@@ -41,11 +41,13 @@ Ext.define('chat.view.Viewport', {
 				itemId: 'localVideo',
 				margins: '0 5 0 0',
 				flex: 1,
+				layout: 'fit',
 				title: 'Local'
 			}, {
 				xtype: 'panel',
 				itemId: 'remoteVideo',
 				flex: 1,
+				layout: 'fit',
 				title: 'Remote'
 			} ]
 		} ];

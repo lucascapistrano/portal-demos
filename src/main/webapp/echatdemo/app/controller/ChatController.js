@@ -102,7 +102,7 @@ Ext.define('chat.controller.ChatController', {
 			});
 		} else {
 			
-			navigator.getUserMedia({
+			getUserMedia({
 				video: true,
 				audio: !!navigator.webkitGetUserMedia
 			}, me.onUserMediaSuccess.bind(me), me.onUserMediaFailure.bind(me));
@@ -188,7 +188,7 @@ Ext.define('chat.controller.ChatController', {
 	},
 
 	onUserSelectionChange: function(grid, selected) {
-		if (!!navigator.getUserMedia && this.connected && selected && selected.length > 0
+		if (!!getUserMedia && this.connected && selected && selected.length > 0
 				&& selected[0].get('username') !== this.connected && selected[0].get('supportsWebRTC')) {
 			this.getStartPeerConnectionButton().setDisabled(false);
 		} else {
@@ -207,16 +207,7 @@ Ext.define('chat.controller.ChatController', {
 		};
 
 		this.localVideoElement = this.getLocalVideo().body.createChild(cfg);
-		this.attachStream(this.localVideoElement.dom, this.localMediaStream);
-	},
-
-	attachStream: function(video, stream) {
-		if (navigator.mozGetUserMedia) {
-			video.mozSrcObject = stream;
-			video.play();
-		} else {
-			video.src = window.URL.createObjectURL(stream);
-		}
+		attachMediaStream(this.localVideoElement.dom, this.localMediaStream);
 	},
 
 	startSnapshotTask: function() {
@@ -319,7 +310,7 @@ Ext.define('chat.controller.ChatController', {
 		};
 
 		this.remoteVideoElement = this.getRemoteVideo().body.createChild(cfg);
-		this.attachStream(this.remoteVideoElement.dom, event.stream);
+		attachMediaStream(this.remoteVideoElement.dom, event.stream);
 	},
 	
 	onSendButton: function() {
