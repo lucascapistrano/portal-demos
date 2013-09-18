@@ -36,7 +36,6 @@ public class TailInitializer implements ServletContextListener {
 	private final Pattern accessLogPattern = Pattern.compile(getAccessLogRegex(), Pattern.CASE_INSENSITIVE
 			| Pattern.DOTALL);
 
-
 	private final UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
 
 	public ExecutorService executor;
@@ -95,7 +94,7 @@ public class TailInitializer implements ServletContextListener {
 			Matcher matcher = accessLogPattern.matcher(line);
 
 			if (!matcher.matches()) {
-				//System.out.println(line);
+				// System.out.println(line);
 				return;
 			}
 

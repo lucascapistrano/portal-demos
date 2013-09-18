@@ -120,12 +120,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.twitter</groupId>
-			<artifactId>hbc-twitter4j</artifactId>
-			<version>1.4.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>ch.rasc</groupId>
 			<artifactId>embeddedtc</artifactId>
 			<version>1.9</version>
@@ -136,6 +130,12 @@
 			<groupId>resources</groupId>
 			<artifactId>extjs-theme-steelblue</artifactId>
 			<version>4.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<version>3.0.2</version>
 		</dependency>
 
 	</dependencies>
