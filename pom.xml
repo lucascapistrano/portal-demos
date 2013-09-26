@@ -118,14 +118,7 @@
 			<artifactId>imgscalr-lib</artifactId>
 			<version>4.2</version>
 		</dependency>
-
-		<dependency>
-			<groupId>ch.rasc</groupId>
-			<artifactId>embeddedtc</artifactId>
-			<version>1.9</version>
-			<scope>provided</scope>
-		</dependency>
-
+		
 		<dependency>
 			<groupId>resources</groupId>
 			<artifactId>extjs-theme-steelblue</artifactId>
@@ -138,6 +131,13 @@
 			<version>3.0.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>ch.rasc</groupId>
+			<artifactId>embeddedtc</artifactId>
+			<version>1.9</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<repositories>
@@ -145,7 +145,7 @@
 			<id>rasc</id>
 			<name>My Private Repository</name>
 			<url>http://repository.rasc.ch</url>
-		</repository>
+		</repository>	
 	</repositories>
 
 	<build>
