@@ -1,5 +1,7 @@
 package ch.rasc.portaldemos.twitter;
 
+import java.util.Collections;
+
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 
@@ -16,6 +18,7 @@ import com.github.flowersinthesand.portal.App;
 import com.github.flowersinthesand.portal.Options;
 import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 import com.github.flowersinthesand.portal.spring.SpringModule;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
@@ -41,7 +44,11 @@ public class SpringConfig {
 
 	@Bean
 	public ITopic<Tweet> hazelcastTopic() {
-		HazelcastInstance hc = Hazelcast.newHazelcastInstance();
+		Config config = new Config();
+		config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
+		config.getNetworkConfig().getJoin().getTcpIpConfig().setMembers(Collections.singletonList("127.0.0.1")).setEnabled(true);
+		
+		HazelcastInstance hc = Hazelcast.newHazelcastInstance(config);
 		return hc.getTopic("tweets");
 	}
 
