@@ -649,7 +649,7 @@
 
   // Sample timestamp formatting function
   SmoothieChart.timeFormatter = function(date) {
-    function pad2(number) { return (number < 10 ? '0' : '') + number }
+    function pad2(number) { return (number < 10 ? '0' : '') + number; }
     return pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ':' + pad2(date.getSeconds());
   };
 

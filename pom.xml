@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.rasc</groupId>
 	<artifactId>portal-demos</artifactId>
-	<version>0.6</version>
+	<version>0.7</version>
 	<packaging>war</packaging>
 
 	<prerequisites>
@@ -44,25 +44,19 @@
 		<dependency>
 			<groupId>com.github.flowersinthesand</groupId>
 			<artifactId>portal-core</artifactId>
-			<version>0.6</version>
+			<version>0.7</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.flowersinthesand</groupId>
 			<artifactId>portal-atmosphere</artifactId>
-			<version>0.6</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>atmosphere-compat-tomcat7</artifactId>
-					<groupId>org.atmosphere</groupId>
-				</exclusion>
-			</exclusions>
+			<version>0.7</version>			
 		</dependency>
 		
 		<dependency>
 			<groupId>com.github.flowersinthesand</groupId>
 			<artifactId>portal-spring</artifactId>
-			<version>0.6</version>
+			<version>0.7</version>
 		</dependency>
  
 		<dependency>
@@ -145,7 +139,7 @@
 			<id>rasc</id>
 			<name>My Private Repository</name>
 			<url>http://repository.rasc.ch</url>
-		</repository>	
+		</repository>
 	</repositories>
 
 	<build>
@@ -199,7 +193,7 @@
 
 		</plugins>
 	</build>
-
+	
 	<pluginRepositories>
 		<pluginRepository>
 			<id>sonatype</id>
@@ -212,6 +206,6 @@
 				<enabled>true</enabled>
 			</releases>
 		</pluginRepository>
-	</pluginRepositories>	
+	</pluginRepositories>
 	
 </project>

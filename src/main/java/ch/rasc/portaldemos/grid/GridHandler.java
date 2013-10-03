@@ -10,7 +10,6 @@ import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
-import com.github.flowersinthesand.portal.Throw;
 import com.github.flowersinthesand.portal.Wire;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -23,7 +22,6 @@ public class GridHandler {
 
 	@On
 	@Reply
-	@Throw
 	public Collection<Book> bookRead(@Data StoreReadRequest readRequest) throws Throwable {
 		Collection<Book> list = BookDb.list();
 		Ordering<Book> ordering = PropertyOrderingFactory.createOrderingFromSorters(readRequest.getSorters());
@@ -33,7 +31,6 @@ public class GridHandler {
 
 	@On
 	@Reply
-	@Throw
 	public List<Book> bookCreate(Socket socket, @Data Book[] books) throws Throwable {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
@@ -47,7 +44,6 @@ public class GridHandler {
 
 	@On
 	@Reply
-	@Throw
 	public List<Book> bookUpdate(Socket socket, @Data Book[] books) throws Throwable {
 		List<Book> result = Lists.newArrayList();
 		for (Book book : books) {
@@ -61,7 +57,6 @@ public class GridHandler {
 
 	@On
 	@Reply
-	@Throw
 	public boolean bookDestroy(Socket socket, @Data Integer[] bookIds) throws Throwable {
 		BookDb.delete(Arrays.asList(bookIds));
 		hall.out(socket).send("bookDestroyed", bookIds);

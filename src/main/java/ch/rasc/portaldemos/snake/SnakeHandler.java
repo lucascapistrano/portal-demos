@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.flowersinthesand.portal.Bean;
+import com.github.flowersinthesand.portal.Destroy;
 import com.github.flowersinthesand.portal.On;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
@@ -72,6 +73,11 @@ public class SnakeHandler {
 
 	@Wire
 	Room hall;
+
+	@Destroy
+	public void destroy() {
+		gameTimer.cancel();
+	}
 
 	@On
 	public void open(Socket socket) {

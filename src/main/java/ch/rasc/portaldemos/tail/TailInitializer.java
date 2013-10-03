@@ -48,8 +48,7 @@ public class TailInitializer implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		app = new App(new Options().url("/tail").packageOf(this), new AtmosphereModule(sce.getServletContext()))
-				.register();
+		app = new App(new Options().url("/tail").packageOf(this), new AtmosphereModule(sce.getServletContext()));
 
 		try {
 			String property = System.getProperty("TAIL_GEOCITY_DAT");
@@ -77,6 +76,8 @@ public class TailInitializer implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
+		app.close();
+
 		if (tailers != null) {
 			for (Tailer tailer : tailers) {
 				tailer.stop();
@@ -84,7 +85,7 @@ public class TailInitializer implements ServletContextListener {
 		}
 
 		if (executor != null) {
-			executor.shutdown();
+			executor.shutdownNow();
 		}
 	}
 

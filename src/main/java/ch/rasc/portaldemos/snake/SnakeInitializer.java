@@ -11,15 +11,16 @@ import com.github.flowersinthesand.portal.atmosphere.AtmosphereModule;
 @WebListener
 public class SnakeInitializer implements ServletContextListener {
 
+	private App app;
+
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		new App(new Options().url("/snake").packageOf(this), new AtmosphereModule(event.getServletContext()))
-				.register();
+		app = new App(new Options().url("/snake").packageOf(this), new AtmosphereModule(event.getServletContext()));
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		// nothing here
+		app.close();
 	}
 
 }
