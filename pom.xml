@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 
 	<prerequisites>
-		<maven>3.0.4</maven>
+		<maven>3.1.0</maven>
 	</prerequisites>
 
 	<properties>
@@ -80,7 +80,7 @@
 		<dependency>
 			<groupId>net.sf.uadetector</groupId>
 			<artifactId>uadetector-resources</artifactId>
-			<version>2013.09</version>
+			<version>2013.10</version>
 		</dependency>
 
 		<dependency>
