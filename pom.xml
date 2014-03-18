@@ -20,19 +20,19 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>3.2.6.RELEASE</version>
+			<version>4.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>3.2.6.RELEASE</version>
+			<version>4.0.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>3.2.6.RELEASE</version>
+			<version>4.0.2.RELEASE</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>16.0-rc1</version>
+			<version>16.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -80,7 +80,7 @@
 		<dependency>
 			<groupId>net.sf.uadetector</groupId>
 			<artifactId>uadetector-resources</artifactId>
-			<version>2013.12</version>
+			<version>2014.02</version>
 		</dependency>
 
 		<dependency>
@@ -92,19 +92,19 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+			<version>1.7.6</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.7.5</version>
+			<version>1.7.6</version>
 		</dependency>
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
+			<version>1.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -122,13 +122,13 @@
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
-			<version>3.1.3</version>
+			<version>3.1.5</version>
 		</dependency>
 
 		<dependency>
 			<groupId>ch.rasc</groupId>
 			<artifactId>embeddedtc</artifactId>
-			<version>1.10</version>
+			<version>1.12</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -158,7 +158,7 @@
 			<plugin>
 				<groupId>ch.rasc</groupId>
 				<artifactId>embeddedtc-maven-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.9</version>
 				<executions>
 					<execution>
 						<goals>
