@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -86,8 +85,7 @@ public class SnakeHandler {
 		snakes.put(id, snake);
 
 		List<Map<String, ?>> snakesObjects = new ArrayList<>();
-		for (Iterator<Snake> iterator = getSnakes().iterator(); iterator.hasNext();) {
-			Snake s = iterator.next();
+		for (Snake s : getSnakes()) {
 			snakesObjects.add(ImmutableMap.of("id", s.getId(), "color", s.getHexColor()));
 		}
 
@@ -122,8 +120,7 @@ public class SnakeHandler {
 
 	private void tick() {
 		List<Map<String, Object>> snakeLocations = new ArrayList<>();
-		for (Iterator<Snake> iterator = getSnakes().iterator(); iterator.hasNext();) {
-			Snake snake = iterator.next();
+		for (Snake snake : getSnakes()) {
 			snake.update(getSnakes());
 			snakeLocations.add(snake.getLocationObjects());
 		}
@@ -140,7 +137,7 @@ public class SnakeHandler {
 		float saturation = (random.nextInt(2000) + 1000) / 10000f;
 		float luminance = 0.9f;
 		Color color = Color.getHSBColor(hue, saturation, luminance);
-		return '#' + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
+		return '#' + Integer.toHexString(color.getRGB() & 0xffffff | 0x1000000).substring(1);
 	}
 
 	public static Location getRandomLocation() {
@@ -151,7 +148,7 @@ public class SnakeHandler {
 
 	private static int roundByGridSize(int value) {
 		int v = value;
-		v = v + (SnakeHandler.GRID_SIZE / 2);
+		v = v + SnakeHandler.GRID_SIZE / 2;
 		v = v / SnakeHandler.GRID_SIZE;
 		v = v * SnakeHandler.GRID_SIZE;
 		return v;

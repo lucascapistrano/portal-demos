@@ -1,5 +1,6 @@
 package ch.rasc.portaldemos.grid;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +12,6 @@ import com.github.flowersinthesand.portal.Reply;
 import com.github.flowersinthesand.portal.Room;
 import com.github.flowersinthesand.portal.Socket;
 import com.github.flowersinthesand.portal.Wire;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 @Bean
@@ -32,7 +32,7 @@ public class GridHandler {
 	@On
 	@Reply
 	public List<Book> bookCreate(Socket socket, @Data Book[] books) throws Throwable {
-		List<Book> result = Lists.newArrayList();
+		List<Book> result = new ArrayList<>();
 		for (Book book : books) {
 			BookDb.create(book);
 			result.add(book);
@@ -45,7 +45,7 @@ public class GridHandler {
 	@On
 	@Reply
 	public List<Book> bookUpdate(Socket socket, @Data Book[] books) throws Throwable {
-		List<Book> result = Lists.newArrayList();
+		List<Book> result = new ArrayList<>();
 		for (Book book : books) {
 			BookDb.update(book);
 			result.add(book);
